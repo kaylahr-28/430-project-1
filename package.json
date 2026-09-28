@@ -1,0 +1,27 @@
+{
+  "name": "430-project-1",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/kaylahr-28/430-project-1#readme",
+  "bugs": {
+    "url": "https://github.com/kaylahr-28/430-project-1/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kaylahr-28/430-project-1.git"
+  },
+  "license": "ISC",
+  "author": "kr",
+  "type": "commonjs",
+  "main": "./src/server.js",
+  "scripts": {
+    "pretest": "eslint ./src --fix",
+    "start": "node ./src/server.js",
+    "test": "echo \"Tests Complete\""
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.11.0",
+    "globals": "^17.12.0"
+  }
+}
