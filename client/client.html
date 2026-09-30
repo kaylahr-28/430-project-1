@@ -11,21 +11,171 @@
         // 1+ supporting query parameters to filter/limit API data
         // - Search by name
         // - Search by type
-        // - get favorites
+        // - get favorites+reasoning
+        // - get all pokemon
 
         // 2+ post endpoints for adding/editing data
-        // - create pokemon
+        // - create pokemon (name, type, height m, weight kg)
         // - add favorites w/ reasoning (insert name + reasoning)
-        const init = () => {
+        // const handleResponse = async (response, method) => {
+        //     const typeContent = document.querySelector("#typeContent");
+        //     let content;
+        //     content = typeContent;
 
-        }
+        //     switch (response.status) {
+        //         case 200:
+        //             content.innerHTML = `<b>Success!</b>`;
+        //             break;
+        //         case 201:
+        //             content.innerHTML = `<b>Created!</b>`;
+        //             break;
+        //         case 204:
+        //             content.innerHTML = `<b>Updated! (No Content)`;
+        //             return;
+        //         case 400:
+        //             content.innerHTML = `<b>Bad Request :(</b>`;
+        //             break;
+        //         case 404:
+        //             content.innerHTML = `<b>Content Not Found </3</b>`;
+        //             break;
+        //     }
 
-        window.onload = init;
+        //     if (method !== "HEAD") {
+        //         let obj = await response.json();
+        //         content.innerHTML += `${response.status == 400 || response.status == 404 ? JSON.stringify(obj.message) : JSON.stringify(obj)}`;
+        //         console.log(obj);
+        //     }
+        // }
+
+        // const handleForm = async (form) => {
+        //     const url = form.getAttribute('method');
+        //     const method = form.elements['method'].value;
+        //     //if content type is json, stringify. if its the other one, parse accordingly
+
+
+        //     const response = await fetch(url, {
+        //         method: method,
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //             'Content-Length': form.length,
+        //             'Accept': 'application/json',//['application/json', 'application/x-www-form-urlencoded'],
+        //         },
+        //     });
+        //     //  handleResponse(response, method);
+        // }
+
+        // const init = () => {
+        //     const allForm = document.querySelector("#allForm");
+
+        //     //for getting pokemon
+        //     const getPokemon = (e) => {
+        //         e.preventDefault();
+        //         handleForm(allForm);
+        //         return false;
+        //     }
+
+        //     allForm.addEventListener('submit', getPokemon);
+        // }
+
+        // window.onload = init;
     </script>
 </head>
 
 <body>
     <h1>Pokemon!</h1>
+    <h2>GET Requests</h2>
+    <div>
+        <h3>Search by name</h3>
+        <form id="nameForm" action="/getPokemon" method="get">
+            <label for="name">Name: </label>
+            <input id="nameField" type="text" name="name" />
+            <label>
+                <input type="radio" name="method" value="GET" checked />
+                GET
+            </label><label>
+                <input type="radio" name="method" value="HEAD" />
+                HEAD
+            </label>
+            <input type="submit" value="Get Pokemon" />
+        </form>
+        <p id="nameContent"></p>
+    </div>
+    <div>
+        <h3>Search by type</h3>
+        <form id="typeForm" action="/getPokemon" method="get">
+            <label for="type">Type: </label>
+            <select id="methodSelect">
+                <option value="fire">Fire</option>
+                <option value="water">Water</option>
+            </select>
+            <label>
+                <input type="radio" name="method" value="GET" checked />
+                GET
+            </label><label>
+                <input type="radio" name="method" value="HEAD" />
+                HEAD
+            </label>
+            <input type="submit" value="Get Pokemon" />
+        </form>
+        <p id="typeContent"></p>
+    </div>
+    <div>
+        <h3>Get favorites</h3>
+        <form id="typeForm" action="/getPokemon" method="get">
+            <label>
+                <input type="radio" name="method" value="GET" checked />
+                GET
+            </label><label>
+                <input type="radio" name="method" value="HEAD" />
+                HEAD
+            </label>
+            <input type="submit" value="Get Favorites" />
+        </form>
+        <p id="favContent"></p>
+    </div>
+    <div>
+        <h3>Get all Pokemon</h3>
+        <form id="allForm" action="/getPokemon" method="get">
+            <label>
+                <input type="radio" name="method" value="GET" checked />
+                GET
+            </label><label>
+                <input type="radio" name="method" value="HEAD" />
+                HEAD
+            </label>
+            <input type="submit" value="Get All" />
+        </form>
+        <p id="allContent"></p>
+    </div>
+
+    <h2>POST Requests</h2>
+    <div>
+        <h3>Create a Pokemon</h3>
+        <form id="createForm" action="/postPokemon" method="post">
+
+            <label for="name">Name: </label>
+            <input id="createNameField" type="text" name="name" />
+            <label for="type">Type: </label>
+            <select id="typeSelect">
+                <option value="water">Water</option>
+                <option value="fire">Fire</option>
+            </select>
+            <input type="submit" value="Create Pokemon" />
+        </form>
+        <p id="createContent"></p>
+    </div>
+    <div>
+        <h3>Add pokemon to favorites</h3>
+        <form id="favForm" action="/postPokemon" method="post">
+
+            <label for="name">Name: </label>
+            <input id="favNameField" type="text" name="name" />
+            <label for="favReason">Why are you favoriting this Pokemon?: </label>
+            <input id="reasonField" type="text" name="favReason" />
+            <input type="submit" value="Favorite Pokemon" />
+        </form>
+        <p id="addFavContent"></p>
+    </div>
 </body>
 
 </html>
