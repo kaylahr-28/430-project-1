@@ -1,41 +1,41 @@
 const http = require('http');
-//const query = require('querystring');
-//const jsonHandler = require('./jsonResponses.js');
+const query = require('querystring');
+const jsonHandler = require('./jsonResponses.js');
 const htmlHandler = require('./htmlResponses.js');
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
-// const parseBody = (request, response, handler) => {
-//     const body = [];
+const parseBody = (request, response, handler) => {
+    const body = [];
 
-//     //error
-//     request.on('error', (err) => {
-//         console.dir(err);
-//         response.statusCode = 400;
-//         response.end();
-//     });
+    //error
+    request.on('error', (err) => {
+        console.dir(err);
+        response.statusCode = 400;
+        response.end();
+    });
 
-//     //add data to array
-//     request.on('data', (chunk) => {
-//         body.push(chunk);
-//     });
+    //add data to array
+    request.on('data', (chunk) => {
+        body.push(chunk);
+    });
 
-//     request.on('end', () => {
-//         const bodyString = Buffer.concat(body).toString();
-//         const type = request.headers['content-type'];
-//         //turn into obj
-//         if (type === 'application/json') {
-//             request.body = JSON.parse(bodyString);
-//         } else if (type === 'application/x-www-form-urlencoded') {
-//             request.body = query.parse(bodyString);
-//         } else {
-//             response.writeHead(400, { 'Content-Type': 'application/json' });
-//             response.write(JSON.stringify({ error: 'invalid data format' }));
-//             return response.end();
-//         }
-//         handler(request, response);
-//     });
-// };
+    request.on('end', () => {
+        const bodyString = Buffer.concat(body).toString();
+        const type = request.headers['content-type'];
+        //turn into obj
+        if (type === 'application/json') {
+            request.body = JSON.parse(bodyString);
+        } else if (type === 'application/x-www-form-urlencoded') {
+            request.body = query.parse(bodyString);
+        } else {
+            response.writeHead(400, { 'Content-Type': 'application/json' });
+            response.write(JSON.stringify({ error: 'invalid data format' }));
+            return response.end();
+        }
+        handler(request, response);
+    });
+};
 
 
 const onRequest = (request, response) => {
@@ -45,13 +45,14 @@ const onRequest = (request, response) => {
         '/client.html': htmlHandler.getIndex,
         '/style.css': htmlHandler.getCSS,
         '/': htmlHandler.getIndex,
-        //  '/getPokemon': jsonHandler.getPokemon,
+        '/getPokemon': jsonHandler.getPokemon,
 
     }
 
-    if (urlStruct[parsedUrl]) {
-        urlStruct[parsedUrl](request, response);
+    if (urlStruct[parsedUrl.pathname]) {
+        urlStruct[parsedUrl.pathname](request, response);
     }
+
 }
 
 http.createServer(onRequest).listen(port, () => {

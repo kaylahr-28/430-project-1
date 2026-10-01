@@ -17,74 +17,79 @@
         // 2+ post endpoints for adding/editing data
         // - create pokemon (name, type, height m, weight kg)
         // - add favorites w/ reasoning (insert name + reasoning)
-        // const handleResponse = async (response, method) => {
-        //     const typeContent = document.querySelector("#typeContent");
-        //     let content;
-        //     content = typeContent;
+        const handleResponse = async (response, method) => {
+            const typeContent = document.querySelector("#typeContent");
+            let content;
+            content = typeContent;
 
-        //     switch (response.status) {
-        //         case 200:
-        //             content.innerHTML = `<b>Success!</b>`;
-        //             break;
-        //         case 201:
-        //             content.innerHTML = `<b>Created!</b>`;
-        //             break;
-        //         case 204:
-        //             content.innerHTML = `<b>Updated! (No Content)`;
-        //             return;
-        //         case 400:
-        //             content.innerHTML = `<b>Bad Request :(</b>`;
-        //             break;
-        //         case 404:
-        //             content.innerHTML = `<b>Content Not Found </3</b>`;
-        //             break;
-        //     }
+            switch (response.status) {
+                case 200:
+                    content.innerHTML = `<b>Success!</b>`;
+                    break;
+                case 201:
+                    content.innerHTML = `<b>Created!</b>`;
+                    break;
+                case 204:
+                    content.innerHTML = `<b>Updated! (No Content)`;
+                    return;
+                case 400:
+                    content.innerHTML = `<b>Bad Request :(</b>`;
+                    break;
+                case 404:
+                    content.innerHTML = `<b>Content Not Found </3</b>`;
+                    break;
+            }
 
-        //     if (method !== "HEAD") {
-        //         let obj = await response.json();
-        //         content.innerHTML += `${response.status == 400 || response.status == 404 ? JSON.stringify(obj.message) : JSON.stringify(obj)}`;
-        //         console.log(obj);
-        //     }
-        // }
+            if (method !== "HEAD") {
+                let obj = await response.json();
+                content.innerHTML += `${response.status == 400 || response.status == 404 ? JSON.stringify(obj.message) : JSON.stringify(obj)}`;
+                console.log(obj);
+            }
+        }
 
-        // const handleForm = async (form) => {
-        //     const url = form.getAttribute('method');
-        //     const method = form.elements['method'].value;
-        //     //if content type is json, stringify. if its the other one, parse accordingly
+        const handleForm = async (form) => {
+            const url = form.getAttribute('method');
+            const method = form.elements['method'].value;
+            //if content type is json, stringify. if its the other one, parse accordingly
 
 
-        //     const response = await fetch(url, {
-        //         method: method,
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //             'Content-Length': form.length,
-        //             'Accept': 'application/json',//['application/json', 'application/x-www-form-urlencoded'],
-        //         },
-        //     });
-        //     //  handleResponse(response, method);
-        // }
+            const response = await fetch(url, {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Content-Length': form.length,
+                    'Accept': 'application/json',//['application/json', 'application/x-www-form-urlencoded'],
+                },
+            });
+            handleResponse(response, method);
+        }
 
-        // const init = () => {
-        //     const allForm = document.querySelector("#allForm");
+        const showSection = () => {
+            //set clicked section to true/visible
+            //set all other sections to not visible
+        }
 
-        //     //for getting pokemon
-        //     const getPokemon = (e) => {
-        //         e.preventDefault();
-        //         handleForm(allForm);
-        //         return false;
-        //     }
+        const init = () => {
+            const allForm = document.querySelector("#allForm");
 
-        //     allForm.addEventListener('submit', getPokemon);
-        // }
+            //for getting pokemon
+            const getPokemon = (e) => {
+                e.preventDefault();
+                handleForm(allForm);
+                return false;
+            }
 
-        // window.onload = init;
+            allForm.addEventListener('submit', getPokemon);
+        }
+
+        window.onload = init;
     </script>
 </head>
 
 <body>
     <h1>Pokemon!</h1>
     <h2>GET Requests</h2>
-    <div>
+    <div id="nameDiv">
         <h3>Search by name</h3>
         <form id="nameForm" action="/getPokemon" method="get">
             <label for="name">Name: </label>
@@ -100,7 +105,7 @@
         </form>
         <p id="nameContent"></p>
     </div>
-    <div>
+    <div id="typeDiv">
         <h3>Search by type</h3>
         <form id="typeForm" action="/getPokemon" method="get">
             <label for="type">Type: </label>
@@ -119,7 +124,7 @@
         </form>
         <p id="typeContent"></p>
     </div>
-    <div>
+    <div id="favDiv">
         <h3>Get favorites</h3>
         <form id="typeForm" action="/getPokemon" method="get">
             <label>
@@ -133,7 +138,7 @@
         </form>
         <p id="favContent"></p>
     </div>
-    <div>
+    <div id="allDiv">
         <h3>Get all Pokemon</h3>
         <form id="allForm" action="/getPokemon" method="get">
             <label>
@@ -149,7 +154,7 @@
     </div>
 
     <h2>POST Requests</h2>
-    <div>
+    <div id="createDiv">
         <h3>Create a Pokemon</h3>
         <form id="createForm" action="/postPokemon" method="post">
 
@@ -164,7 +169,7 @@
         </form>
         <p id="createContent"></p>
     </div>
-    <div>
+    <div id="addFavDiv">
         <h3>Add pokemon to favorites</h3>
         <form id="favForm" action="/postPokemon" method="post">
 
