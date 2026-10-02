@@ -24,14 +24,16 @@ const getPokemon = (request, response) => {
     };
 
     if (request.query.type) {
-
+        console.log('request.query.type', request.query.type);
     }
 
     respondJSON(request, response, 200, responseJSON);
 }
 
 //add id
-const getPokemonType = (request, response) => {
+const getPokemonType = (request, response, parsedUrl) => {
+    request.query = Object.fromEntries(parsedUrl.searchParams);
+    console.log(request.query);
     const types = ["Water", "Fire", "Grass", "Poison", "Flying", "Psychic", "Ice", "Ground", "Rock", "Electric", "Bug", "Normal", "Fighting", "Fairy",
         "Ghost", "Dark", "Steel", "Dragon"]
     const responseJSON = {
@@ -44,6 +46,7 @@ const getPokemonType = (request, response) => {
             responseJSON.id = 'missingTypeParam'
         return respondJSON(request, response, 400, responseJSON);
     }
+    console.log('request.query.type', request.query.type);
     //type doesnt exist
     if (!types.includes(request.query.type)) {
         responseJSON.message = "This type does not exist!",

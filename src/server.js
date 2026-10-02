@@ -48,7 +48,7 @@ const parseBody = (request, response, handler) => {
 
 const handleGet = (request, response, parsedUrl) => {
     if (urlStruct[parsedUrl.pathname]) {
-        urlStruct[parsedUrl.pathname](request, response);
+        urlStruct[parsedUrl.pathname](request, response, parsedUrl);
     }
 }
 
@@ -63,8 +63,8 @@ const onRequest = (request, response) => {
     const parsedUrl = new URL(request.url, `${protocol}://${request.headers.host}`);
 
     request.query = Object.fromEntries(parsedUrl.searchParams);
-    console.log('request query', request.query);
-
+    //console.log('request.query', request.query);
+    //console.log("parsedURL", parsedUrl);
     if (!urlStruct[parsedUrl.pathname]) {
         urlStruct['notFound'](request, response);
         return;

@@ -28,7 +28,7 @@
                     content.innerHTML = `<b>Created!</b>`;
                     break;
                 case 204:
-                    content.innerHTML = `<b>Favorited! (No Content)`;
+                    content.innerHTML = `<b>Favorited! (No Content)</b>`;
                     return;
                 case 400:
                     content.innerHTML = `<b>Bad Request :(</b>`;
@@ -47,7 +47,7 @@
                 } else {
                     finalOutput = JSON.stringify(obj);
                 }
-                content.innerHTML += `${finalOutput}`;//`${response.status == 400 || response.status == 404 ? JSON.stringify(obj.message) : finalOutput}`;
+                content.innerHTML += `<p>Content-Length: ${JSON.stringify(obj).length}</p><p>${finalOutput}</p>`;//`${response.status == 400 || response.status == 404 ? JSON.stringify(obj.message) : finalOutput}`;
                 console.log(obj);
             }
         }
@@ -55,7 +55,7 @@
         const handleForm = async (form, content) => {
             const url = form.getAttribute('action');
             const method = form.elements['method'].value;
-            console.log(method);
+
             //if content type is json, stringify. if its the other one, parse accordingly
 
 
@@ -73,6 +73,7 @@
         const showSection = (selectedForm) => {
             console.log("clicked");
             const forms = document.querySelectorAll('form');
+            const divs = document.querySelectorAll('div');
             //set clicked section to true/visible
             //set all other sections to not visible
             if (selectedForm.style.display == "block") {
@@ -83,6 +84,11 @@
                 });
                 selectedForm.style.display = 'block';
             }
+
+            //clear out all content in divs
+            divs.forEach(div => {
+                div.innerHTML = "";
+            });
         }
 
         const init = () => {
@@ -102,24 +108,51 @@
 
             const allContent = document.querySelector("#allContent");
             const typeContent = document.querySelector("#typeContent");
+            const nameContent = document.querySelector("#nameContent");
 
             //for getting pokemon
             const getPokemon = (form, content) => {
+                console.log(content);
                 handleForm(form, content);
                 return false;
             }
 
             allHeader.addEventListener('click', (e) => { showSection(allForm); })
             typeHeader.addEventListener('click', (e) => { showSection(typeForm); })
+            nameHeader.addEventListener('click', (e) => { showSection(nameForm); })
 
-            allForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                getPokemon(allForm, allContent);
-            });
-            typeForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                getPokemon(typeForm, typeContent);
-            });
+
+            // allForm.addEventListener('submit', (e) => {
+            //     e.preventDefault();
+            //     getPokemon(allForm, allContent);
+            // });
+            // typeForm.addEventListener('submit', (e) => {
+            //     const formData = new FormData(typeForm);
+            //     const searchParams = new URLSearchParams(formData);
+            //     console.log("searchParams new", searchParams);
+            //     const newUrl = `${window.location.pathname}?${searchParams.toString()}`;
+
+            //     e.preventDefault();
+            //     window.history.pushState({}, '', newUrl);
+
+            //     getPokemon(typeForm, typeContent);
+            // });
+            // nameForm.addEventListener('submit', (e) => {
+            //     e.preventDefault();
+            //     getPokemon(nameForm, nameContent);
+            // });
+            document.querySelectorAll('form').forEach(
+                form => {
+                    form.addEventListener('submit', (e) => {
+                        e.preventDefault();
+                        const formData = new FormData(form);
+                        const searchParams = new URLSearchParams(formData);
+                        console.log("search paramsss", searchParams);
+                        getPokemon(form, typeContent);
+
+                    });
+                }
+            );
 
         }
 
@@ -130,7 +163,7 @@
 <body>
     <h1>Pokemon!</h1>
     <h2>GET Requests</h2>
-    <div>
+    <section>
         <h3 id="nameHeader">Search by name</h3>
         <form id="nameForm" action="/getPokemon">
             <label for="name">Name: </label>
@@ -142,12 +175,12 @@
                 <input type="radio" name="method" value="HEAD" />
                 HEAD
             </label>
-            <input type="submit" value="Get Pokemon" />
+            <input type="submit" value="Get Pokemon By Name" />
 
-            <p id="nameContent"></p>
+            <div id="nameContent" name="content"></div>
         </form>
-    </div>
-    <div>
+    </section>
+    <section>
         <h3 id="typeHeader">Search by type</h3>
         <form id="typeForm" action="/getPokemonType">
             <p>Water, Fire, Grass, Poison, Flying, Psychic, Ice, Ground, Rock, Electric, Bug, Normal, Fighting, Fairy,
@@ -161,12 +194,12 @@
                 <input type="radio" name="method" value="HEAD" />
                 HEAD
             </label>
-            <input type="submit" value="Get Pokemon" />
+            <input type="submit" value="Get Pokemon By Type" />
 
-            <p id="typeContent"></p>
+            <div id="typeContent" name="content"></div>
         </form>
-    </div>
-    <div>
+    </section>
+    <section>
         <h3 id="favHeader">Get favorites</h3>
         <form id="favForm" action="/getPokemon">
             <label>
@@ -178,10 +211,10 @@
             </label>
             <input type="submit" value="Get Favorites" />
 
-            <p id="favContent"></p>
+            <div id="favContent" name="content"></div>
         </form>
-    </div>
-    <div>
+    </section>
+    <section>
         <h3 id="allHeader">Get all Pokemon</h3>
         <form id="allForm" action="/getPokemon">
             <label>
@@ -193,12 +226,12 @@
             </label>
             <input type="submit" value="Get All" />
 
-            <p id="allContent"></p>
+            <div id="allContent" name="content"></div>
         </form>
-    </div>
+    </section>
 
     <h2>POST Requests</h2>
-    <div>
+    <section>
         <h3 id="createHeader">Create a Pokemon</h3>
         <form id="createForm" action="/addPokemon">
 
@@ -211,10 +244,10 @@
             </select>
             <input type="submit" value="Create Pokemon" />
 
-            <p id="createContent"></p>
+            <div id="createContent" name="content"></div>
         </form>
-    </div>
-    <div>
+    </section>
+    <section>
         <h3 id="addFavHeader">Add pokemon to favorites</h3>
         <form id="favForm" action="/addPokemon">
 
@@ -224,9 +257,9 @@
             <input id="reasonField" type="text" name="favReason" />
             <input type="submit" value="Favorite Pokemon" />
 
-            <p id="addFavContent"></p>
+            <div id="addFavContent" name="content"></div>
         </form>
-    </div>
+    </section>
 </body>
 
 </html>
