@@ -10,7 +10,8 @@ const urlStruct = {
     '/style.css': htmlHandler.getCSS,
     '/': htmlHandler.getIndex,
     '/getPokemon': jsonHandler.getPokemon,
-    '/getPokemonType': jsonHandler.getPokemonType,
+    '/getPokemonType': jsonHandler.getPokemon,
+    '/getPokemonName': jsonHandler.getPokemon,
     'notFound': jsonHandler.notFound,
 }
 
@@ -48,7 +49,7 @@ const parseBody = (request, response, handler) => {
 
 const handleGet = (request, response, parsedUrl) => {
     if (urlStruct[parsedUrl.pathname]) {
-        urlStruct[parsedUrl.pathname](request, response, parsedUrl);
+        urlStruct[parsedUrl.pathname](request, response, parsedUrl.pathname);
     }
 }
 
@@ -61,10 +62,8 @@ const handlePost = (request, response, parsedUrl) => {
 const onRequest = (request, response) => {
     const protocol = request.connection.ecrypted ? 'https' : 'http';
     const parsedUrl = new URL(request.url, `${protocol}://${request.headers.host}`);
-
     request.query = Object.fromEntries(parsedUrl.searchParams);
-    //console.log('request.query', request.query);
-    //console.log("parsedURL", parsedUrl);
+
     if (!urlStruct[parsedUrl.pathname]) {
         urlStruct['notFound'](request, response);
         return;
@@ -72,6 +71,7 @@ const onRequest = (request, response) => {
     if (request.method == "POST") {
         handlePost(request, response, parsedUrl);
     } else {
+
         handleGet(request, response, parsedUrl);
     }
 }

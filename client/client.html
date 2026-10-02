@@ -48,14 +48,13 @@
                     finalOutput = JSON.stringify(obj);
                 }
                 content.innerHTML += `<p>Content-Length: ${JSON.stringify(obj).length}</p><p>${finalOutput}</p>`;//`${response.status == 400 || response.status == 404 ? JSON.stringify(obj.message) : finalOutput}`;
-                console.log(obj);
             }
         }
 
-        const handleForm = async (form, content) => {
-            const url = form.getAttribute('action');
+        const handleForm = async (form, content, searchParams) => {
+            let url = form.getAttribute('action');
             const method = form.elements['method'].value;
-
+            url += `?${searchParams}`;
             //if content type is json, stringify. if its the other one, parse accordingly
 
 
@@ -67,11 +66,10 @@
                     'Accept': 'application/json',//['application/json', 'application/x-www-form-urlencoded'],
                 },
             });
-            handleResponse(response, method, content);
+            handleResponse(response, method, content, searchParams);
         }
 
         const showSection = (selectedForm) => {
-            console.log("clicked");
             const forms = document.querySelectorAll('form');
             const divs = document.querySelectorAll('div');
             //set clicked section to true/visible
@@ -92,68 +90,31 @@
         }
 
         const init = () => {
-            const allForm = document.querySelector("#allForm");
-            const typeForm = document.querySelector("#typeForm");
-            const nameForm = document.querySelector("#nameForm");
-            const favForm = document.querySelector("#favForm");
-            const createForm = document.querySelector("#createForm");
-            const addFavForm = document.querySelector("#addFavForm");
-
-            const nameHeader = document.querySelector("#nameHeader");
-            const typeHeader = document.querySelector("#typeHeader");
-            const favHeader = document.querySelector("#favHeader");
-            const allHeader = document.querySelector("#allHeader");
-            const createHeader = document.querySelector("#createHeader");
-            const addFavHeader = document.querySelector("#addFavHeader");
-
-            const allContent = document.querySelector("#allContent");
-            const typeContent = document.querySelector("#typeContent");
-            const nameContent = document.querySelector("#nameContent");
 
             //for getting pokemon
-            const getPokemon = (form, content) => {
-                console.log(content);
-                handleForm(form, content);
+            const getPokemon = (form, content, searchParams) => {
+                handleForm(form, content, searchParams);
                 return false;
             }
 
-            allHeader.addEventListener('click', (e) => { showSection(allForm); })
-            typeHeader.addEventListener('click', (e) => { showSection(typeForm); })
-            nameHeader.addEventListener('click', (e) => { showSection(nameForm); })
+            //when a header is clicked on, adjust visibility of elements accordingly
+            document.querySelectorAll('h3').forEach(
+                header => header.addEventListener('click', (e) => {
+                    showSection(header.nextElementSibling);
+                }));
 
-
-            // allForm.addEventListener('submit', (e) => {
-            //     e.preventDefault();
-            //     getPokemon(allForm, allContent);
-            // });
-            // typeForm.addEventListener('submit', (e) => {
-            //     const formData = new FormData(typeForm);
-            //     const searchParams = new URLSearchParams(formData);
-            //     console.log("searchParams new", searchParams);
-            //     const newUrl = `${window.location.pathname}?${searchParams.toString()}`;
-
-            //     e.preventDefault();
-            //     window.history.pushState({}, '', newUrl);
-
-            //     getPokemon(typeForm, typeContent);
-            // });
-            // nameForm.addEventListener('submit', (e) => {
-            //     e.preventDefault();
-            //     getPokemon(nameForm, nameContent);
-            // });
+            //when a form is submitted, handle its contents
             document.querySelectorAll('form').forEach(
                 form => {
                     form.addEventListener('submit', (e) => {
                         e.preventDefault();
+                        //saving query parameters to append to url in handleForm
                         const formData = new FormData(form);
                         const searchParams = new URLSearchParams(formData);
-                        console.log("search paramsss", searchParams);
-                        getPokemon(form, typeContent);
-
+                        getPokemon(form, form.querySelector('div'), searchParams.toString());
                     });
                 }
             );
-
         }
 
         window.onload = init;
@@ -165,7 +126,7 @@
     <h2>GET Requests</h2>
     <section>
         <h3 id="nameHeader">Search by name</h3>
-        <form id="nameForm" action="/getPokemon">
+        <form id="nameForm" action="/getPokemonName">
             <label for="name">Name: </label>
             <input id="nameField" type="text" name="name" />
             <label>
