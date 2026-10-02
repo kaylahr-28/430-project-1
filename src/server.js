@@ -5,6 +5,15 @@ const htmlHandler = require('./htmlResponses.js');
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
+const urlStruct = {
+    '/client.html': htmlHandler.getIndex,
+    '/style.css': htmlHandler.getCSS,
+    '/': htmlHandler.getIndex,
+    '/getPokemon': jsonHandler.getPokemon,
+    '/getPokemonType': jsonHandler.getPokemonType,
+    'notFound': jsonHandler.notFound,
+}
+
 const parseBody = (request, response, handler) => {
     const body = [];
 
@@ -37,22 +46,34 @@ const parseBody = (request, response, handler) => {
     });
 };
 
+const handleGet = (request, response, parsedUrl) => {
+    if (urlStruct[parsedUrl.pathname]) {
+        urlStruct[parsedUrl.pathname](request, response);
+    }
+}
+
+const handlePost = (request, response, parsedUrl) => {
+    if (parsedUrl.pathname == "/addPokemon") {
+        parseBody(request, response, jsonHandler.addPokemon);
+    }
+}
 
 const onRequest = (request, response) => {
     const protocol = request.connection.ecrypted ? 'https' : 'http';
     const parsedUrl = new URL(request.url, `${protocol}://${request.headers.host}`);
-    const urlStruct = {
-        '/client.html': htmlHandler.getIndex,
-        '/style.css': htmlHandler.getCSS,
-        '/': htmlHandler.getIndex,
-        '/getPokemon': jsonHandler.getPokemon,
 
+    request.query = Object.fromEntries(parsedUrl.searchParams);
+    console.log('request query', request.query);
+
+    if (!urlStruct[parsedUrl.pathname]) {
+        urlStruct['notFound'](request, response);
+        return;
     }
-
-    if (urlStruct[parsedUrl.pathname]) {
-        urlStruct[parsedUrl.pathname](request, response);
+    if (request.method == "POST") {
+        handlePost(request, response, parsedUrl);
+    } else {
+        handleGet(request, response, parsedUrl);
     }
-
 }
 
 http.createServer(onRequest).listen(port, () => {

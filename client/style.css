@@ -2,3 +2,14 @@ h1 {
     margin: 0 auto;
     color: pink;
 }
+
+form {
+    display: none;
+    background-color: azure;
+}
+
+h3 {
+    width: 100%;
+    background-color: aquamarine;
+    padding: 5px;
+}

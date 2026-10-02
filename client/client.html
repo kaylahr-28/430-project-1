@@ -17,10 +17,8 @@
         // 2+ post endpoints for adding/editing data
         // - create pokemon (name, type, height m, weight kg)
         // - add favorites w/ reasoning (insert name + reasoning)
-        const handleResponse = async (response, method) => {
-            const typeContent = document.querySelector("#typeContent");
-            let content;
-            content = typeContent;
+        const handleResponse = async (response, method, content) => {
+
 
             switch (response.status) {
                 case 200:
@@ -30,7 +28,7 @@
                     content.innerHTML = `<b>Created!</b>`;
                     break;
                 case 204:
-                    content.innerHTML = `<b>Updated! (No Content)`;
+                    content.innerHTML = `<b>Favorited! (No Content)`;
                     return;
                 case 400:
                     content.innerHTML = `<b>Bad Request :(</b>`;
@@ -41,15 +39,23 @@
             }
 
             if (method !== "HEAD") {
+                let finalOutput;
                 let obj = await response.json();
-                content.innerHTML += `${response.status == 400 || response.status == 404 ? JSON.stringify(obj.message) : JSON.stringify(obj)}`;
+                //dont display all data if its too long
+                if (JSON.stringify(obj).length > 400) {
+                    finalOutput = JSON.stringify(obj).slice(0, 400) + '...';
+                } else {
+                    finalOutput = JSON.stringify(obj);
+                }
+                content.innerHTML += `${finalOutput}`;//`${response.status == 400 || response.status == 404 ? JSON.stringify(obj.message) : finalOutput}`;
                 console.log(obj);
             }
         }
 
-        const handleForm = async (form) => {
-            const url = form.getAttribute('method');
+        const handleForm = async (form, content) => {
+            const url = form.getAttribute('action');
             const method = form.elements['method'].value;
+            console.log(method);
             //if content type is json, stringify. if its the other one, parse accordingly
 
 
@@ -61,25 +67,60 @@
                     'Accept': 'application/json',//['application/json', 'application/x-www-form-urlencoded'],
                 },
             });
-            handleResponse(response, method);
+            handleResponse(response, method, content);
         }
 
-        const showSection = () => {
+        const showSection = (selectedForm) => {
+            console.log("clicked");
+            const forms = document.querySelectorAll('form');
             //set clicked section to true/visible
             //set all other sections to not visible
+            if (selectedForm.style.display == "block") {
+                selectedForm.style.display = "none";
+            } else {
+                forms.forEach(form => {
+                    form.style.display = 'none';
+                });
+                selectedForm.style.display = 'block';
+            }
         }
 
         const init = () => {
             const allForm = document.querySelector("#allForm");
+            const typeForm = document.querySelector("#typeForm");
+            const nameForm = document.querySelector("#nameForm");
+            const favForm = document.querySelector("#favForm");
+            const createForm = document.querySelector("#createForm");
+            const addFavForm = document.querySelector("#addFavForm");
+
+            const nameHeader = document.querySelector("#nameHeader");
+            const typeHeader = document.querySelector("#typeHeader");
+            const favHeader = document.querySelector("#favHeader");
+            const allHeader = document.querySelector("#allHeader");
+            const createHeader = document.querySelector("#createHeader");
+            const addFavHeader = document.querySelector("#addFavHeader");
+
+            const allContent = document.querySelector("#allContent");
+            const typeContent = document.querySelector("#typeContent");
 
             //for getting pokemon
-            const getPokemon = (e) => {
-                e.preventDefault();
-                handleForm(allForm);
+            const getPokemon = (form, content) => {
+                handleForm(form, content);
                 return false;
             }
 
-            allForm.addEventListener('submit', getPokemon);
+            allHeader.addEventListener('click', (e) => { showSection(allForm); })
+            typeHeader.addEventListener('click', (e) => { showSection(typeForm); })
+
+            allForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                getPokemon(allForm, allContent);
+            });
+            typeForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                getPokemon(typeForm, typeContent);
+            });
+
         }
 
         window.onload = init;
@@ -89,9 +130,9 @@
 <body>
     <h1>Pokemon!</h1>
     <h2>GET Requests</h2>
-    <div id="nameDiv">
-        <h3>Search by name</h3>
-        <form id="nameForm" action="/getPokemon" method="get">
+    <div>
+        <h3 id="nameHeader">Search by name</h3>
+        <form id="nameForm" action="/getPokemon">
             <label for="name">Name: </label>
             <input id="nameField" type="text" name="name" />
             <label>
@@ -102,17 +143,17 @@
                 HEAD
             </label>
             <input type="submit" value="Get Pokemon" />
+
+            <p id="nameContent"></p>
         </form>
-        <p id="nameContent"></p>
     </div>
-    <div id="typeDiv">
-        <h3>Search by type</h3>
-        <form id="typeForm" action="/getPokemon" method="get">
+    <div>
+        <h3 id="typeHeader">Search by type</h3>
+        <form id="typeForm" action="/getPokemonType">
+            <p>Water, Fire, Grass, Poison, Flying, Psychic, Ice, Ground, Rock, Electric, Bug, Normal, Fighting, Fairy,
+                Ghost, Dark, Steel, Dragon</p>
             <label for="type">Type: </label>
-            <select id="methodSelect">
-                <option value="fire">Fire</option>
-                <option value="water">Water</option>
-            </select>
+            <input id="typeField" type="text" name="type" />
             <label>
                 <input type="radio" name="method" value="GET" checked />
                 GET
@@ -121,12 +162,13 @@
                 HEAD
             </label>
             <input type="submit" value="Get Pokemon" />
+
+            <p id="typeContent"></p>
         </form>
-        <p id="typeContent"></p>
     </div>
-    <div id="favDiv">
-        <h3>Get favorites</h3>
-        <form id="typeForm" action="/getPokemon" method="get">
+    <div>
+        <h3 id="favHeader">Get favorites</h3>
+        <form id="favForm" action="/getPokemon">
             <label>
                 <input type="radio" name="method" value="GET" checked />
                 GET
@@ -135,12 +177,13 @@
                 HEAD
             </label>
             <input type="submit" value="Get Favorites" />
+
+            <p id="favContent"></p>
         </form>
-        <p id="favContent"></p>
     </div>
-    <div id="allDiv">
-        <h3>Get all Pokemon</h3>
-        <form id="allForm" action="/getPokemon" method="get">
+    <div>
+        <h3 id="allHeader">Get all Pokemon</h3>
+        <form id="allForm" action="/getPokemon">
             <label>
                 <input type="radio" name="method" value="GET" checked />
                 GET
@@ -149,14 +192,15 @@
                 HEAD
             </label>
             <input type="submit" value="Get All" />
+
+            <p id="allContent"></p>
         </form>
-        <p id="allContent"></p>
     </div>
 
     <h2>POST Requests</h2>
-    <div id="createDiv">
-        <h3>Create a Pokemon</h3>
-        <form id="createForm" action="/postPokemon" method="post">
+    <div>
+        <h3 id="createHeader">Create a Pokemon</h3>
+        <form id="createForm" action="/addPokemon">
 
             <label for="name">Name: </label>
             <input id="createNameField" type="text" name="name" />
@@ -166,20 +210,22 @@
                 <option value="fire">Fire</option>
             </select>
             <input type="submit" value="Create Pokemon" />
+
+            <p id="createContent"></p>
         </form>
-        <p id="createContent"></p>
     </div>
-    <div id="addFavDiv">
-        <h3>Add pokemon to favorites</h3>
-        <form id="favForm" action="/postPokemon" method="post">
+    <div>
+        <h3 id="addFavHeader">Add pokemon to favorites</h3>
+        <form id="favForm" action="/addPokemon">
 
             <label for="name">Name: </label>
             <input id="favNameField" type="text" name="name" />
             <label for="favReason">Why are you favoriting this Pokemon?: </label>
             <input id="reasonField" type="text" name="favReason" />
             <input type="submit" value="Favorite Pokemon" />
+
+            <p id="addFavContent"></p>
         </form>
-        <p id="addFavContent"></p>
     </div>
 </body>
 
