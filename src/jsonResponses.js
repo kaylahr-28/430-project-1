@@ -1,5 +1,14 @@
 const fs = require('fs');
 const pokemon = JSON.parse(fs.readFileSync(`${__dirname}/../pokedex.json`));
+const favPokemon = [];
+
+const allNames = [];
+for (let monster of pokemon) {
+    allNames.push(monster.name);
+}
+
+const types = ["Water", "Fire", "Grass", "Poison", "Flying", "Psychic", "Ice", "Ground", "Rock", "Electric", "Bug", "Normal", "Fighting", "Fairy",
+    "Ghost", "Dark", "Steel", "Dragon"];
 
 const respondJSON = (request, response, status, obj) => {
     let content = JSON.stringify(obj);
@@ -24,23 +33,17 @@ const getPokemon = (request, response, pathname) => {
             pokemon,
         };
         return respondJSON(request, response, 200, responseJSON);
-    }
-    const responseJSON = {
 
-    };
-    //figure out what to do if user submits nothing in form
-    console.log(request.query.name ? true : false);
-    //search by type
-    if (request.query.type) {
-        const types = ["Water", "Fire", "Grass", "Poison", "Flying", "Psychic", "Ice", "Ground", "Rock", "Electric", "Bug", "Normal", "Fighting", "Fairy",
-            "Ghost", "Dark", "Steel", "Dragon"];
+        //search by type
+    } else if (pathname == "/getPokemonType") {
+        const responseJSON = {};
+
         //no type given
         if (request.query.type == "") {
             responseJSON.message = "Please submit a type!",
                 responseJSON.id = 'missingTypeParam'
             return respondJSON(request, response, 400, responseJSON);
         }
-        console.log('request.query.type', request.query.type);
 
         //type doesnt exist
         if (!types.includes(request.query.type)) {
@@ -54,11 +57,11 @@ const getPokemon = (request, response, pathname) => {
         responseJSON.pokemon = selectedPokemon;
 
         return respondJSON(request, response, 200, responseJSON);
-    } else if (request.query.name) {
-        const allNames = [];
-        for (let monster of pokemon) {
-            allNames.push(monster.name);
-        }
+
+        //search by name
+    } else if (pathname == "/getPokemonName") {
+        const responseJSON = {};
+
         //no name given
         if (request.query.name == "") {
             responseJSON.message = "Please submit a name!",
@@ -77,53 +80,89 @@ const getPokemon = (request, response, pathname) => {
         const selectedPokemon = pokemon.filter(monster => monster.name.includes(request.query.name));
         responseJSON.pokemon = selectedPokemon;
         return respondJSON(request, response, 200, responseJSON);
+    } else if (pathname == "/getPokemonFavs") {
+
+
+        if (favPokemon.length == 0) {
+            const responseJSON = {};
+            responseJSON.message = 'You have no favorited pokemon!';
+            responseJSON.id = 'favPokemonNotFound';
+
+            return respondJSON(request, response, 404, responseJSON);
+        } else {
+            const responseJSON = { favPokemon };
+            return respondJSON(request, response, 201, responseJSON);
+        }
     }
+
+
 }
 
-const addPokemon = (request, response) => {
+const addPokemon = (request, response, pathname) => {
     //options: create new pokemon or add one to favorites
-    const responseJSON = {
-        message: 'Please provide a name, type, height (m), and weight (kg).',
-    };
+    if (pathname == "/addPokemon") {
+        const responseJSON = {
+            message: 'Please provide a name and type.',
+        };
 
-    const { name, type } = request.body;
+        const { name, type } = request.query;
+        //both needed
+        if (!name || !type) {
+            responseJSON.id = 'addPokemonMissingParams';
+            return respondJSON(request, response, 400, responseJSON);
+        };
 
-    //both needed
-    if (!name || !type) {
-        responseJSON.id = 'addUserMissingParams';
-        return respondJSON(request, response, 400, responseJSON);
-    };
+        //cant create a pokemon with an existing name
+        if (allNames.includes(name)) {
+            responseJSON.message = "A Pokemon with this name already exists!";
+            responseJSON.id = 'duplicatePokemonName';
+            return respondJSON(request, response, 400,)
+        }
 
-    //204:updated (added to favorites)
-    let responseCode = 204;
+        //invalid type
+        if (!types.includes(type)) {
+            responseJSON.message = "Please insert a valid type!";
+            responseJSON.id = "invalidTypeParam"
+            return respondJSON(request, response, 404, responseJSON);
+        }
 
-    //201: new pokemon
-    for (let monster of pokemon) {
-        if (monster["name"] == name) { }
+        pokemon.push({ "name": name, "type": type });
+        allNames.push(name);
+        responseJSON.message = `Your ${type} type pokemon, ${name}, has been created!`;
+        return respondJSON(request, response, 201, responseJSON);
+
+    } else if (pathname == "/favPokemon") {
+        const responseJSON = {
+            message: 'Please provide a name and reasoning.',
+        };
+
+        const { name, favReason } = request.query;
+        //both needed
+        if (!name || !favReason) {
+            responseJSON.id = 'favPokemonMissingParams';
+            return respondJSON(request, response, 400, responseJSON);
+        };
+
+        //cant fav a pokemon that doesn't exist
+        if (!allNames.includes(name)) {
+            responseJSON.message = "Please insert a valid Pokemon name!";
+            responseJSON.id = 'pokemonNotFound';
+            return respondJSON(request, response, 404, responseJSON)
+        }
+
+        for (let monster of pokemon) {
+            if (monster.name === name) {
+                monster.favorite = {};
+                monster.favorite.isFavorited = true;
+                monster.favorite.reasoning = favReason;
+                favPokemon.push(monster);
+            }
+        }
+        responseJSON.message = `${name} has been favorited for the following reason: ${favReason}`;
+        return respondJSON(request, response, 204, responseJSON);
     }
-}
 
-const favoritePokemon = (request, response) => {
-    //options: create new pokemon or add one to favorites
-    const responseJSON = {
-        message: 'Please provide a name, type, height, and weight.',
-    };
 
-    const { name, type } = request.body;
-
-    //both needed
-    if (!name || !type) {
-        responseJSON.id = 'addUserMissingParams';
-        return respondJSON(request, response, 400, responseJSON);
-    };
-
-    //204:updated (added to favorites)
-    let responseCode = 204;
-
-    //201: new pokemon
-    for (let monster of pokemon) {
-        if (monster["name"] == name) { }
-    }
 }
 
 const notFound = (request, response) => {
@@ -138,6 +177,5 @@ const notFound = (request, response) => {
 module.exports = {
     getPokemon,
     addPokemon,
-    favoritePokemon,
     notFound
 }

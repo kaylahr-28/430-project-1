@@ -12,10 +12,13 @@ const urlStruct = {
     '/getPokemon': jsonHandler.getPokemon,
     '/getPokemonType': jsonHandler.getPokemon,
     '/getPokemonName': jsonHandler.getPokemon,
+    '/getPokemonFavs': jsonHandler.getPokemon,
+    '/addPokemon': jsonHandler.addPokemon,
+    '/favPokemon': jsonHandler.addPokemon,
     'notFound': jsonHandler.notFound,
 }
 
-const parseBody = (request, response, handler) => {
+const parseBody = (request, response, handler, parsedUrl) => {
     const body = [];
 
     //error
@@ -43,7 +46,7 @@ const parseBody = (request, response, handler) => {
             response.write(JSON.stringify({ error: 'invalid data format' }));
             return response.end();
         }
-        handler(request, response);
+        handler(request, response, parsedUrl);
     });
 };
 
@@ -54,8 +57,8 @@ const handleGet = (request, response, parsedUrl) => {
 }
 
 const handlePost = (request, response, parsedUrl) => {
-    if (parsedUrl.pathname == "/addPokemon") {
-        parseBody(request, response, jsonHandler.addPokemon);
+    if (parsedUrl.pathname == "/addPokemon" || parsedUrl.pathname == "/favPokemon") {
+        parseBody(request, response, jsonHandler.addPokemon, parsedUrl);
     }
 }
 
@@ -68,7 +71,7 @@ const onRequest = (request, response) => {
         urlStruct['notFound'](request, response);
         return;
     }
-    if (request.method == "POST") {
+    if (request.method == "post") {
         handlePost(request, response, parsedUrl);
     } else {
 

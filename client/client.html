@@ -25,10 +25,10 @@
                     content.innerHTML = `<b>Success!</b>`;
                     break;
                 case 201:
-                    content.innerHTML = `<b>Created!</b>`;
+                    content.innerHTML = `<b>Pokemon created!</b>`;
                     break;
                 case 204:
-                    content.innerHTML = `<b>Favorited! (No Content)</b>`;
+                    content.innerHTML = `<b>Pokemon favorited! (No Content)</b>`;
                     return;
                 case 400:
                     content.innerHTML = `<b>Bad Request :(</b>`;
@@ -47,26 +47,47 @@
                 } else {
                     finalOutput = JSON.stringify(obj);
                 }
-                content.innerHTML += `<p>Content-Length: ${JSON.stringify(obj).length}</p><p>${finalOutput}</p>`;//`${response.status == 400 || response.status == 404 ? JSON.stringify(obj.message) : finalOutput}`;
+                content.innerHTML += `<p>${response.status} status code</p><p>Content-Length: ${JSON.stringify(obj).length}</p><p>${finalOutput}</p>`;//`${response.status == 400 || response.status == 404 ? JSON.stringify(obj.message) : finalOutput}`;
             }
         }
 
         const handleForm = async (form, content, searchParams) => {
             let url = form.getAttribute('action');
-            const method = form.elements['method'].value;
             url += `?${searchParams}`;
             //if content type is json, stringify. if its the other one, parse accordingly
+            let method;
+            let response;
+            if (form.getAttribute('method') == "POST") {
+                method = form.getAttribute('method');
+                const newName = document.querySelector("#createNameField").value;
+                const newType = document.querySelector("#typeSelect").value;
 
+                const formData = JSON.stringify({ newName, newType });
+                response = await fetch(url, {
+                    method: form.getAttribute('method'),
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Content-Length': formData.length,
+                        'Accept': 'application/json',//['application/json', 'application/x-www-form-urlencoded'],
+                    },
+                    body: formData,
+                });
+                handleResponse(response, method, content);
 
-            const response = await fetch(url, {
-                method: method,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Content-Length': form.length,
-                    'Accept': 'application/json',//['application/json', 'application/x-www-form-urlencoded'],
-                },
-            });
-            handleResponse(response, method, content, searchParams);
+            } else {
+                method = form.elements['method'].value;
+
+                response = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Content-Length': form.length,
+                        'Accept': 'application/json',//['application/json', 'application/x-www-form-urlencoded'],
+                    },
+                });
+                handleResponse(response, method, content);
+
+            }
         }
 
         const showSection = (selectedForm) => {
@@ -147,7 +168,26 @@
             <p>Water, Fire, Grass, Poison, Flying, Psychic, Ice, Ground, Rock, Electric, Bug, Normal, Fighting, Fairy,
                 Ghost, Dark, Steel, Dragon</p>
             <label for="type">Type: </label>
-            <input id="typeField" type="text" name="type" />
+            <select id="typeField" name="type">
+                <option value="Water">Water</option>
+                <option value="Fire">Fire</option>
+                <option value="Grass">Grass</option>
+                <option value="Poison">Poison</option>
+                <option value="Flying">Flying</option>
+                <option value="Psychic">Psychic</option>
+                <option value="Ice">Ice</option>
+                <option value="Ground">Ground</option>
+                <option value="Rock">Rock</option>
+                <option value="Electric">Electric</option>
+                <option value="Bug">Bug</option>
+                <option value="Normal">Normal</option>
+                <option value="Fighting">Fighting</option>
+                <option value="Fairy">Fairy</option>
+                <option value="Ghost">Ghost</option>
+                <option value="Dark">Dark</option>
+                <option value="Steel">Steel</option>
+                <option value="Dragon">Dragon</option>
+            </select>
             <label>
                 <input type="radio" name="method" value="GET" checked />
                 GET
@@ -162,7 +202,7 @@
     </section>
     <section>
         <h3 id="favHeader">Get favorites</h3>
-        <form id="favForm" action="/getPokemon">
+        <form id="favForm" action="/getPokemonFavs">
             <label>
                 <input type="radio" name="method" value="GET" checked />
                 GET
@@ -194,14 +234,30 @@
     <h2>POST Requests</h2>
     <section>
         <h3 id="createHeader">Create a Pokemon</h3>
-        <form id="createForm" action="/addPokemon">
+        <form id="createForm" action="/addPokemon" method="POST">
 
             <label for="name">Name: </label>
             <input id="createNameField" type="text" name="name" />
             <label for="type">Type: </label>
-            <select id="typeSelect">
-                <option value="water">Water</option>
-                <option value="fire">Fire</option>
+            <select id="typeSelect" name="type">
+                <option value="Water">Water</option>
+                <option value="Fire">Fire</option>
+                <option value="Grass">Grass</option>
+                <option value="Poison">Poison</option>
+                <option value="Flying">Flying</option>
+                <option value="Psychic">Psychic</option>
+                <option value="Ice">Ice</option>
+                <option value="Ground">Ground</option>
+                <option value="Rock">Rock</option>
+                <option value="Electric">Electric</option>
+                <option value="Bug">Bug</option>
+                <option value="Normal">Normal</option>
+                <option value="Fighting">Fighting</option>
+                <option value="Fairy">Fairy</option>
+                <option value="Ghost">Ghost</option>
+                <option value="Dark">Dark</option>
+                <option value="Steel">Steel</option>
+                <option value="Dragon">Dragon</option>
             </select>
             <input type="submit" value="Create Pokemon" />
 
@@ -210,7 +266,7 @@
     </section>
     <section>
         <h3 id="addFavHeader">Add pokemon to favorites</h3>
-        <form id="favForm" action="/addPokemon">
+        <form id="favForm" action="/favPokemon" method="POST">
 
             <label for="name">Name: </label>
             <input id="favNameField" type="text" name="name" />
