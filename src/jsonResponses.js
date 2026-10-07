@@ -13,7 +13,6 @@ const types = ["Water", "Fire", "Grass", "Poison", "Flying", "Psychic", "Ice", "
 
 //used to format JSON before sending it over to be displayed
 const formatPokemon = (pokemon) => {
-    //  const formatMonster = {};
     for (let monster of pokemon) {
         const formatMonster = {
             "name": monster.name,
@@ -36,7 +35,6 @@ const formatPokemon = (pokemon) => {
                 "reasoning": monster.favorite.reasoning
             }
         }
-
         formattedPokemon.push(formatMonster);
     }
     return formattedPokemon;
@@ -64,19 +62,7 @@ const getPokemon = (request, response, pathname) => {
     if (pathname == "/getPokemon") {
         const responseJSON = formatPokemon(pokemon);
         console.log(formatPokemon(pokemon));
-        //show name, type, height, weight
-        // for (let monster of pokemon) {
-        //     responseJSON[monster.name] = {
-        //         "type": monster.type,
-        //         "height": monster.height,
-        //         "weight": monster.weight,
-        //         // "favorite": {
-        //         //     "isFavorited": monster.favorite.isFavorited ? true : false,
-        //         //     "reasoning": monster.favorite.isFavorited ? monster.favorite.reasoning : "N/A"
-        //         // }
-        //     };
-
-        // }
+     
         return respondJSON(request, response, 200, responseJSON);
 
         //search by type
