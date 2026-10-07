@@ -13,3 +13,7 @@ h3 {
     background-color: aquamarine;
     padding: 5px;
 }
+
+.docDiv {
+    display: none;
+}

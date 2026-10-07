@@ -1,6 +1,7 @@
 const fs = require('fs');
 const pokemon = JSON.parse(fs.readFileSync(`${__dirname}/../pokedex.json`));
 const favPokemon = [];
+const formattedPokemon = [];
 
 const allNames = [];
 for (let monster of pokemon) {
@@ -9,6 +10,37 @@ for (let monster of pokemon) {
 
 const types = ["Water", "Fire", "Grass", "Poison", "Flying", "Psychic", "Ice", "Ground", "Rock", "Electric", "Bug", "Normal", "Fighting", "Fairy",
     "Ghost", "Dark", "Steel", "Dragon"];
+
+//used to format JSON before sending it over to be displayed
+const formatPokemon = (pokemon) => {
+    //  const formatMonster = {};
+    for (let monster of pokemon) {
+        const formatMonster = {
+            "name": monster.name,
+            "type": monster.type,
+            "height": monster.height,
+            "weight": monster.weight,
+            "favorite": {
+            }
+        };
+        //check if the pokemon has been favorited
+        //if not, set default info
+        if (!monster.favorite) {
+            formatMonster.favorite = {
+                "isFavorited": false,
+                "reasoning": "N/A"
+            }
+        } else {
+            formatMonster.favorite = {
+                "isFavorited": monster.favorite.isFavorited,
+                "reasoning": monster.favorite.reasoning
+            }
+        }
+
+        formattedPokemon.push(formatMonster);
+    }
+    return formattedPokemon;
+}
 
 const respondJSON = (request, response, status, obj) => {
     let content = JSON.stringify(obj);
@@ -26,17 +58,30 @@ const respondJSON = (request, response, status, obj) => {
 };
 
 
+
 const getPokemon = (request, response, pathname) => {
     //get all pokemon
     if (pathname == "/getPokemon") {
-        const responseJSON = {
-            pokemon,
-        };
+        const responseJSON = formatPokemon(pokemon);
+        console.log(formatPokemon(pokemon));
+        //show name, type, height, weight
+        // for (let monster of pokemon) {
+        //     responseJSON[monster.name] = {
+        //         "type": monster.type,
+        //         "height": monster.height,
+        //         "weight": monster.weight,
+        //         // "favorite": {
+        //         //     "isFavorited": monster.favorite.isFavorited ? true : false,
+        //         //     "reasoning": monster.favorite.isFavorited ? monster.favorite.reasoning : "N/A"
+        //         // }
+        //     };
+
+        // }
         return respondJSON(request, response, 200, responseJSON);
 
         //search by type
     } else if (pathname == "/getPokemonType") {
-        const responseJSON = {};
+        let responseJSON = {};
 
         //no type given
         if (request.query.type == "") {
@@ -53,14 +98,14 @@ const getPokemon = (request, response, pathname) => {
         }
 
         //return only pokemon that are of the searched type
-        const selectedPokemon = pokemon.filter(monster => monster.type.includes(request.query.type));
-        responseJSON.pokemon = selectedPokemon;
+        const selectedPokemon = formatPokemon(pokemon).filter(monster => monster.type.includes(request.query.type));
+        responseJSON = selectedPokemon;
 
         return respondJSON(request, response, 200, responseJSON);
 
         //search by name
     } else if (pathname == "/getPokemonName") {
-        const responseJSON = {};
+        let responseJSON = {};
 
         //no name given
         if (request.query.name == "") {
@@ -77,8 +122,8 @@ const getPokemon = (request, response, pathname) => {
         }
 
         //return only pokemon that are of the searched type
-        const selectedPokemon = pokemon.filter(monster => monster.name.includes(request.query.name));
-        responseJSON.pokemon = selectedPokemon;
+        const selectedPokemon = formatPokemon(pokemon).filter(monster => monster.name.includes(request.query.name));
+        responseJSON = selectedPokemon;
         return respondJSON(request, response, 200, responseJSON);
     } else if (pathname == "/getPokemonFavs") {
 
@@ -94,8 +139,6 @@ const getPokemon = (request, response, pathname) => {
             return respondJSON(request, response, 201, responseJSON);
         }
     }
-
-
 }
 
 const addPokemon = (request, response, pathname) => {
@@ -105,7 +148,7 @@ const addPokemon = (request, response, pathname) => {
             message: 'Please provide a name and type.',
         };
 
-        const { name, type } = request.query;
+        const { name, type, height, weight } = request.query;
         //both needed
         if (!name || !type) {
             responseJSON.id = 'addPokemonMissingParams';
@@ -126,7 +169,7 @@ const addPokemon = (request, response, pathname) => {
             return respondJSON(request, response, 404, responseJSON);
         }
 
-        pokemon.push({ "name": name, "type": type });
+        pokemon.push({ "name": name, "type": type, "weight": weight ? weight : "Unknown", "height": height ? height : "Unknown", });
         allNames.push(name);
         responseJSON.message = `Your ${type} type pokemon, ${name}, has been created!`;
         return respondJSON(request, response, 201, responseJSON);

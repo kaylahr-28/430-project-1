@@ -9,16 +9,15 @@
     <script>
         // 4+ get endpoints getting diff data, 
         // 1+ supporting query parameters to filter/limit API data
-        // - Search by name
-        // - Search by type
-        // - get favorites+reasoning
-        // - get all pokemon
+        // - Search by name (CHANGE-- RETURN ONLY NAME not all info), GIVE AMOUNT
+        // - Search by type, GIVE AMOUNT
+        // - get favorites+reasoning, (RETURN ONLY NAME TYPE FAV AND REASONING???) GIVE AMOUNT
+        // - get all pokemon, GIVE AMOUNT
 
         // 2+ post endpoints for adding/editing data
-        // - create pokemon (name, type, height m, weight kg)
+        // - create pokemon (name, type, height m (opt), weight kg (opt))
         // - add favorites w/ reasoning (insert name + reasoning)
         const handleResponse = async (response, method, content) => {
-
 
             switch (response.status) {
                 case 200:
@@ -61,8 +60,14 @@
                 method = form.getAttribute('method');
                 const newName = document.querySelector("#createNameField").value;
                 const newType = document.querySelector("#typeSelect").value;
+                const newHeight = document.querySelector("#typeSelect").value;
 
-                const formData = JSON.stringify({ newName, newType });
+
+                let formData = `name=${newName}&type=${newType}`;
+
+                // if (form.getAttribute)
+                // um how do i check if form data is urlencoded or json..?
+                formData = JSON.stringify({ newName, newType });
                 response = await fetch(url, {
                     method: form.getAttribute('method'),
                     headers: {
@@ -143,6 +148,7 @@
 </head>
 
 <body>
+    <a href="documentation.html">Go To Documentation</a>
     <h1>Pokemon!</h1>
     <h2>GET Requests</h2>
     <section>
@@ -259,6 +265,9 @@
                 <option value="Steel">Steel</option>
                 <option value="Dragon">Dragon</option>
             </select>
+            <!-- <label for="height">Height:</label>
+            <input type="number" id="height" name="height" min="1" max="100"> -->
+
             <input type="submit" value="Create Pokemon" />
 
             <div id="createContent" name="content"></div>

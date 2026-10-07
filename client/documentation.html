@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>430 Project 1 - Documentation</title>
+    <link rel="stylesheet" type="text/css" href="/style.css">
+
+    <script>
+        const showSection = (selectedDiv) => {
+            const divs = document.querySelectorAll('div');
+            //set clicked section to true/visible
+            //set all other sections to not visible
+            if (selectedDiv.style.display == "block") {
+                selectedDiv.style.display = "none";
+            } else {
+                divs.forEach(div => {
+                    div.style.display = 'none';
+                });
+                selectedDiv.style.display = 'block';
+            }
+        }
+
+        const init = () => {
+
+            //for getting pokemon
+            const getPokemon = (form, content, searchParams) => {
+                handleForm(form, content, searchParams);
+                return false;
+            }
+
+            //when a header is clicked on, adjust visibility of elements accordingly
+            document.querySelectorAll('h3').forEach(
+                header => header.addEventListener('click', (e) => {
+                    showSection(header.nextElementSibling);
+                }));
+
+        }
+
+        window.onload = init;
+    </script>
+</head>
+
+<body>
+    <a href="client.html">Go To Test Application</a>
+    <h1>Pokemon!</h1>
+    <h2>GET Requests</h2>
+    <section>
+        <h3>/getPokemonName</h3>
+        <div class="docDiv">Name
+            <h4>Query Params</h4>
+            <span>name</span>
+            <p>(required) - A pokemon's name to filter results with</p>
+            <h4>Returns</h4>
+            <h4>Examples</h4>
+        </div>
+
+    </section>
+    <section>
+        <h3>/getPokemonType</h3>
+        <div class="docDiv">Type</div>
+    </section>
+    <section>
+        <h3>/getPokemonFavs</h3>
+        <div class="docDiv">Favorites</div>
+
+    </section>
+    <section>
+        <h3>/getPokemon</h3>
+        <div class="docDiv">All pokemon</div>
+
+    </section>
+
+    <h2>POST Requests</h2>
+    <section>
+        <h3>/addPokemon</h3>
+        <div class="docDiv">Create</div>
+    </section>
+    <section>
+        <h3>/favPokemon</h3>
+        <div class="docDiv">Add Favorties</div>
+
+    </section>
+</body>
+
+</html>

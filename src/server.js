@@ -15,6 +15,7 @@ const urlStruct = {
     '/getPokemonFavs': jsonHandler.getPokemon,
     '/addPokemon': jsonHandler.addPokemon,
     '/favPokemon': jsonHandler.addPokemon,
+    '/documentation.html': htmlHandler.getDoc,
     'notFound': jsonHandler.notFound,
 }
 
@@ -36,6 +37,7 @@ const parseBody = (request, response, handler, parsedUrl) => {
     request.on('end', () => {
         const bodyString = Buffer.concat(body).toString();
         const type = request.headers['content-type'];
+        console.log('type', type);
         //turn into obj
         if (type === 'application/json') {
             request.body = JSON.parse(bodyString);
