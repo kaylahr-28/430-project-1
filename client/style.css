@@ -1,19 +1,79 @@
-h1 {
+:root {
+    /*86CB92*/
+    --bulma-primary-h: 130deg;
+    --bulma-primary-s: 40%;
+    --bulma-primary-l: 66%;
+    /*71B48D*/
+    --bulma-link-h: 145deg;
+    --bulma-link-s: 31%;
+    --bulma-link-l: 57%;
+    /*404E7C*/
+    --bulma-info-h: 226deg;
+    --bulma-info-s: 32%;
+    --bulma-info-l: 37%;
+    /*251F47*/
+    --bulma-success-h: 249deg;
+    --bulma-success-s: 39%;
+    --bulma-success-l: 20%;
+    /*260F26*/
+    --bulma-warning-h: 300deg;
+    --bulma-warning-s: 43%;
+    --bulma-warning-l: 10%;
+    /*red*/
+    --bulma-danger-s: 73%;
+    --bulma-danger-l: 58%;
+}
+
+html {
+    background-color: #260F26;
+}
+
+.title {
     margin: 0 auto;
-    color: pink;
 }
 
 form {
-    display: none;
+    display: block;
     background-color: azure;
+    accent-color: var(--bulma-link);
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 0.5s ease-out allow-discrete;
+
+    transition-behavior: allow-discrete;
+
+}
+
+.hidden {
+    opacity: 0;
+    transform: translateY(-10px);
+    display: none;
+    transition: all 0.5s ease-out allow-discrete;
+}
+
+@starting-style {
+    form {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
 }
 
 h3 {
     width: 100%;
-    background-color: aquamarine;
+
     padding: 5px;
+    border-radius: 10px;
 }
 
 .docDiv {
     display: none;
+}
+
+input[type="text"] {
+    max-width: 200px;
+    display: inline-block;
+}
+
+label {
+    display: inline;
 }

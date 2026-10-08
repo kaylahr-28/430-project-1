@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>430 Project 1</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
     <link rel="stylesheet" type="text/css" href="/style.css">
     <script>
         // 4+ get endpoints getting diff data, 
@@ -37,6 +38,10 @@
                     break;
             }
 
+
+
+
+
             if (method !== "HEAD") {
                 let finalOutput;
                 let obj = await response.json();
@@ -48,11 +53,23 @@
                 }
                 content.innerHTML += `<p>${response.status} status code</p><p>Content-Length: ${JSON.stringify(obj).length}</p><p>${finalOutput}</p>`;//`${response.status == 400 || response.status == 404 ? JSON.stringify(obj.message) : finalOutput}`;
             }
+            //text is red if status code is 400/404
+            document.querySelectorAll('.content-div *').forEach(
+                e => {
+                    if (response.status == 400 || response.status == 404) {
+                        e.style.color = "#e24665";
+
+                    } else {
+                        e.style.color = 'white';
+                    }
+                }
+            )
         }
 
         const handleForm = async (form, content, searchParams) => {
             let url = form.getAttribute('action');
             url += `?${searchParams}`;
+
             //if content type is json, stringify. if its the other one, parse accordingly
             let method;
             let response;
@@ -63,13 +80,10 @@
                 const height = document.querySelector("#heightField").value;
                 const weight = document.querySelector("#weightField").value;
 
-
                 let formData = `name=${name}&type=${type}&height=${height ? height : 'Unknown'}&weight=${weight ? weight : 'Unknown'}`;
-                console.log(formData);
 
                 //uhhhh fix this
                 formData = JSON.stringify({ name, type, height, weight });
-                console.log('from data again', formData);
                 response = await fetch(url, {
                     method: form.getAttribute('method'),
                     headers: {
@@ -87,7 +101,6 @@
                 response = await fetch(url, {
                     method: method,
                     headers: {
-                        'Content-Type': 'application/json',
                         'Content-Length': form.length,
                         'Accept': 'application/json',//['application/json', 'application/x-www-form-urlencoded'],
                     },
@@ -99,16 +112,16 @@
 
         const showSection = (selectedForm) => {
             const forms = document.querySelectorAll('form');
-            const divs = document.querySelectorAll('div');
+            const divs = document.querySelectorAll('.content-div');
             //set clicked section to true/visible
             //set all other sections to not visible
             if (selectedForm.style.display == "block") {
-                selectedForm.style.display = "none";
+                selectedForm.classList.add('hidden');
             } else {
                 forms.forEach(form => {
-                    form.style.display = 'none';
+                    form.classList.add('hidden');
                 });
-                selectedForm.style.display = 'block';
+                selectedForm.classList.remove("hidden");
             }
 
             //clear out all content in divs
@@ -139,7 +152,7 @@
                         //saving query parameters to append to url in handleForm
                         const formData = new FormData(form);
                         const searchParams = new URLSearchParams(formData);
-                        getPokemon(form, form.querySelector('div'), searchParams.toString());
+                        getPokemon(form, form.querySelector('.content-div'), searchParams.toString());
                     });
                 }
             );
@@ -149,32 +162,44 @@
     </script>
 </head>
 
-<body>
+<body class="m-2">
     <a href="documentation.html">Go To Documentation</a>
-    <h1>Pokemon!</h1>
-    <h2>GET Requests</h2>
+    <h1 class="title is-1 mx-auto my-0 is-centered">Pokemon!</h1>
+    <h2 class="title">GET Requests</h2>
     <section>
-        <h3 id="nameHeader">Search by name</h3>
-        <form id="nameForm" action="/getPokemonName">
-            <label for="name">Name: </label>
-            <input id="nameField" type="text" name="name" />
-            <label>
-                <input type="radio" name="method" value="GET" checked />
-                GET
-            </label><label>
-                <input type="radio" name="method" value="HEAD" />
-                HEAD
-            </label>
-            <input type="submit" value="Get Pokemon By Name" />
+        <h3 class="has-background-info title is-4 is-clickable p-3" id="nameHeader">Search by name</h3>
+        <form class="hidden box has-background-success m-3 p-3 is-shadowless is-3" id="nameForm"
+            action="/getPokemonName">
+            <div class="is-flex is-justify-content-space-between mt-3">
+                <div class="field is-horizontal is-flex is-align-content-centered m-0">
+                    <label class="field-label has-text-white has-text-weight-bold is-align-self-center" for="name">Name:
+                    </label>
+                    <input class="field-body input has-background-white has-text-black" id="nameField" type="text"
+                        name="name" />
+                </div>
 
-            <div id="nameContent" name="content"></div>
+                <div class="is-flex is-justify-content-space-between">
+                    <div class="is-flex is-align-content-centered is-align-self-center">
+                        <label class="title is-6 has-text-info-light m-3">
+                            <input type="radio" name="method" value="GET" checked />
+                            GET
+                        </label>
+
+                        <label class="title is-6 has-text-info-light m-3">
+                            <input type="radio" name="method" value="HEAD" />
+                            HEAD
+                        </label>
+                    </div>
+                </div>
+                <input class="button has-background-link" type="submit" value="Get Pokemon By Name" />
+            </div>
+
+            <div class="content-div mt-3" name="content"></div>
         </form>
     </section>
     <section>
-        <h3 id="typeHeader">Search by type</h3>
-        <form id="typeForm" action="/getPokemonType">
-            <p>Water, Fire, Grass, Poison, Flying, Psychic, Ice, Ground, Rock, Electric, Bug, Normal, Fighting, Fairy,
-                Ghost, Dark, Steel, Dragon</p>
+        <h3 class="title is-4 is-clickable" id="typeHeader">Search by type</h3>
+        <form class="hidden" id="typeForm" action="/getPokemonType">
             <label for="type">Type: </label>
             <select id="typeField" name="type">
                 <option value="Water">Water</option>
@@ -205,12 +230,12 @@
             </label>
             <input type="submit" value="Get Pokemon By Type" />
 
-            <div id="typeContent" name="content"></div>
+            <div class="content-div" name="content"></div>
         </form>
     </section>
     <section>
-        <h3 id="favHeader">Get favorites</h3>
-        <form id="favForm" action="/getPokemonFavs">
+        <h3 class="title is-4 is-clickable" id="favHeader">Get favorites</h3>
+        <form class="hidden" id="favForm" action="/getPokemonFavs">
             <label>
                 <input type="radio" name="method" value="GET" checked />
                 GET
@@ -220,12 +245,12 @@
             </label>
             <input type="submit" value="Get Favorites" />
 
-            <div id="favContent" name="content"></div>
+            <div class="content-div" name="content"></div>
         </form>
     </section>
     <section>
-        <h3 id="allHeader">Get all Pokemon</h3>
-        <form id="allForm" action="/getPokemon">
+        <h3 class="title is-4 is-clickable" id="allHeader">Get all Pokemon</h3>
+        <form class="hidden" id="allForm" action="/getPokemon">
             <label>
                 <input type="radio" name="method" value="GET" checked />
                 GET
@@ -235,14 +260,14 @@
             </label>
             <input type="submit" value="Get All" />
 
-            <div id="allContent" name="content"></div>
+            <div class="content-div" name="content"></div>
         </form>
     </section>
 
-    <h2>POST Requests</h2>
+    <h2 class="title">POST Requests</h2>
     <section>
-        <h3 id="createHeader">Create a Pokemon</h3>
-        <form id="createForm" action="/addPokemon" method="POST">
+        <h3 class="title is-4 is-clickable" id="createHeader">Create a Pokemon</h3>
+        <form class="hidden" id="createForm" action="/addPokemon" method="POST">
 
             <label for="name">Name: </label>
             <input id="createNameField" type="text" name="name" />
@@ -275,12 +300,12 @@
 
             <input type="submit" value="Create Pokemon" />
 
-            <div id="createContent" name="content"></div>
+            <div class="content-div"" name=" content"></div>
         </form>
     </section>
     <section>
-        <h3 id="addFavHeader">Add pokemon to favorites</h3>
-        <form id="favForm" action="/favPokemon" method="POST">
+        <h3 class="title is-4 is-clickable" id="addFavHeader">Add pokemon to favorites</h3>
+        <form class="hidden" id="favForm" action="/favPokemon" method="POST">
 
             <label for="name">Name: </label>
             <input id="favNameField" type="text" name="name" />
@@ -288,7 +313,7 @@
             <input id="reasonField" type="text" name="favReason" />
             <input type="submit" value="Favorite Pokemon" />
 
-            <div id="addFavContent" name="content"></div>
+            <div class="content-div" name="content"></div>
         </form>
     </section>
 </body>

@@ -61,8 +61,7 @@ const getPokemon = (request, response, pathname) => {
     //get all pokemon
     if (pathname == "/getPokemon") {
         const responseJSON = formatPokemon(pokemon);
-        console.log(formatPokemon(pokemon));
-     
+
         return respondJSON(request, response, 200, responseJSON);
 
         //search by type
@@ -145,14 +144,7 @@ const addPokemon = (request, response, pathname) => {
         if (allNames.includes(name)) {
             responseJSON.message = "A Pokemon with this name already exists!";
             responseJSON.id = 'duplicatePokemonName';
-            return respondJSON(request, response, 400,)
-        }
-
-        //invalid type
-        if (!types.includes(type)) {
-            responseJSON.message = "Please insert a valid type!";
-            responseJSON.id = "invalidTypeParam"
-            return respondJSON(request, response, 404, responseJSON);
+            return respondJSON(request, response, 400, responseJSON)
         }
 
         pokemon.push({ "name": name, "type": type, "weight": weight ? weight : "Unknown", "height": height ? height : "Unknown", });
