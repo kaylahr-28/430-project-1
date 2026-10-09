@@ -1,26 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="has-background-warning">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>430 Project 1 - Documentation</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Boldonse&family=Madimi+One&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="/style.css">
 
     <script>
         const showSection = (selectedDiv) => {
-            const divs = document.querySelectorAll('div');
+            const divs = document.querySelectorAll('.doc-div');
             //set clicked section to true/visible
             //set all other sections to not visible
             if (selectedDiv.style.display == "block") {
-                selectedDiv.style.display = "none";
+                selectedDiv.classList.add('hidden');
             } else {
                 divs.forEach(div => {
-                    div.style.display = 'none';
+                    div.classList.add('hidden');
                 });
-                selectedDiv.style.display = 'block';
+                selectedDiv.classList.remove('hidden');
             }
+
+
         }
 
         const init = () => {
@@ -49,7 +54,7 @@
     <h2 class="title">GET Requests</h2>
     <section>
         <h3 class="title is-4">/getPokemonName</h3>
-        <div class="docDiv">Name
+        <div class="hidden doc-div">Name
             <h4>Query Params</h4>
             <span>name</span>
             <p>(required) - A pokemon's name to filter results with</p>
@@ -60,27 +65,27 @@
     </section>
     <section>
         <h3 class="title is-4">/getPokemonType</h3>
-        <div class="docDiv">Type</div>
+        <div class="hidden doc-div">Type</div>
     </section>
     <section>
         <h3 class="title is-4">/getPokemonFavs</h3>
-        <div class="docDiv">Favorites</div>
+        <div class="hidden doc-div">Favorites</div>
 
     </section>
     <section>
         <h3 class="title is-4">/getPokemon</h3>
-        <div class="docDiv">All pokemon</div>
+        <div class="hidden doc-div">All pokemon</div>
 
     </section>
 
     <h2 class="title">POST Requests</h2>
     <section>
         <h3 class="title is-4">/addPokemon</h3>
-        <div class="docDiv">Create</div>
+        <div class="hidden doc-div">Create</div>
     </section>
     <section>
         <h3 class="title is-4">/favPokemon</h3>
-        <div class="docDiv">Add Favorties</div>
+        <div class="hidden doc-div">Add Favorties</div>
 
     </section>
 </body>

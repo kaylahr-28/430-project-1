@@ -3,10 +3,10 @@
     --bulma-primary-h: 130deg;
     --bulma-primary-s: 40%;
     --bulma-primary-l: 66%;
-    /*71B48D*/
-    --bulma-link-h: 145deg;
-    --bulma-link-s: 31%;
-    --bulma-link-l: 57%;
+    /*598185*/
+    --bulma-link-h: 185deg;
+    --bulma-link-s: 20%;
+    --bulma-link-l: 44%;
     /*404E7C*/
     --bulma-info-h: 226deg;
     --bulma-info-s: 32%;
@@ -24,15 +24,12 @@
     --bulma-danger-l: 58%;
 }
 
-html {
-    background-color: #260F26;
-}
-
 .title {
     margin: 0 auto;
 }
 
-form {
+form,
+.doc-div {
     display: block;
     background-color: azure;
     accent-color: var(--bulma-link);
@@ -52,7 +49,9 @@ form {
 }
 
 @starting-style {
-    form {
+
+    form,
+    .doc-div {
         opacity: 0;
         transform: translateY(-10px);
     }
@@ -65,15 +64,53 @@ h3 {
     border-radius: 10px;
 }
 
-.docDiv {
-    display: none;
-}
-
-input[type="text"] {
+input[type="text"],
+input[type="number"] {
     max-width: 200px;
     display: inline-block;
+    height: 30px;
+    /*not working right*/
+    color: var(--bulma-scheme-main);
+    background-color: var(--bulma-scheme-main);
 }
 
 label {
     display: inline;
+}
+
+h1,
+h2 {
+    font-family: "Boldonse";
+}
+
+h2 {
+    padding: 0 2rem;
+}
+
+h3 {
+    font-family: "Madimi One";
+}
+
+input[type="textarea"] {
+    display: block;
+    width: 100%;
+
+}
+
+.button {
+    max-height: max-content;
+}
+
+.form-controls,
+.fav-controls {
+    width: 100%;
+}
+
+
+.fav-name {
+    max-width: fit-content;
+}
+
+section {
+    margin: 0 2rem;
 }
