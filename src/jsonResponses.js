@@ -1,7 +1,7 @@
 const fs = require('fs');
 const pokemon = JSON.parse(fs.readFileSync(`${__dirname}/../pokedex.json`));
 const favPokemon = [];
-const formattedPokemon = [];
+
 
 const allNames = [];
 for (let monster of pokemon) {
@@ -11,8 +11,11 @@ for (let monster of pokemon) {
 const types = ["Water", "Fire", "Grass", "Poison", "Flying", "Psychic", "Ice", "Ground", "Rock", "Electric", "Bug", "Normal", "Fighting", "Fairy",
     "Ghost", "Dark", "Steel", "Dragon"];
 
-//used to format JSON before sending it over to be displayed
+//format JSON objects before sending it over to be displayed
+//removes id/num, img link, weaknesses, next evolution
+//adds 'favorite' key w default vals
 const formatPokemon = (pokemon) => {
+    const formattedPokemon = [];
     for (let monster of pokemon) {
         const formatMonster = {
             "name": monster.name,
@@ -22,6 +25,12 @@ const formatPokemon = (pokemon) => {
             "favorite": {
             }
         };
+        if (!formatMonster.weight.includes('kg')) {
+            formatMonster.weight += " kg";
+            //only added pokemon are missing kg, which means
+            // theyre missing m too
+            formatMonster.height += " m";
+        }
         //check if the pokemon has been favorited
         //if not, set default info
         if (!monster.favorite) {
@@ -120,8 +129,8 @@ const getPokemon = (request, response, pathname) => {
 
             return respondJSON(request, response, 404, responseJSON);
         } else {
-            const responseJSON = { favPokemon };
-            return respondJSON(request, response, 201, responseJSON);
+            const responseJSON = formatPokemon(favPokemon);
+            return respondJSON(request, response, 200, responseJSON);
         }
     }
 }
@@ -171,14 +180,30 @@ const addPokemon = (request, response, pathname) => {
             return respondJSON(request, response, 404, responseJSON)
         }
 
+        let alreadyFav = false;
         for (let monster of pokemon) {
             if (monster.name === name) {
                 monster.favorite = {};
                 monster.favorite.isFavorited = true;
                 monster.favorite.reasoning = favReason;
-                favPokemon.push(monster);
+
+                favPokemon.forEach((fav) => {
+                    if (fav.name === name) { //already favorited
+                        alreadyFav = true;
+                        fav.name.favorite.reasoning = favReason;
+                    }
+                });
+                //if the pokemon has not been favorited before,
+                //add it to the fav pokemon array
+                if (!alreadyFav) {
+                    favPokemon.push(monster);
+                }
             }
+
         }
+
+
+        console.log(favPokemon);
         responseJSON.message = `${name} has been favorited for the following reason: ${favReason}`;
         return respondJSON(request, response, 204, responseJSON);
     }

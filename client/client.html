@@ -171,206 +171,225 @@
 <body class="m-2">
     <a href="documentation.html" class="button has-background-warning-dark has-text-white">Go To Documentation</a>
     <h1 class="title is-1 has-text-centered has-text-primary my-6">Pokemon!</h1>
-    <h2 class="title has-text-link">GET Requests</h2>
-    <section>
-        <h3 class="has-background-info title is-4 is-clickable p-3" id="nameHeader">Search by name</h3>
-        <form class="hidden box has-background-success m-3 mb-6 py-3 px-6 is-shadowless is-3" id="nameForm"
-            action="/getPokemonName">
-            <div class="is-flex is-justify-content-space-between mt-3">
-                <div class="field is-horizontal is-flex is-align-content-center m-0">
-                    <label class="field-label has-text-white has-text-weight-bold is-align-self-center mr-3 mt-1"
-                        for="name">
-                        Name:
-                    </label>
-                    <input class="field-body input has-text-white is-align-self-center" id="nameField" type="text"
-                        name="name" />
-                </div>
+    <div class="container is-flex is-flex-direction-column is-justify-items-center ">
 
-
-                <div class="is-flex is-align-content-center is-align-self-center">
-                    <label class="title is-6 has-text-info-light m-3">
-                        <input type="radio" name="method" value="GET" checked />
-                        GET
-                    </label>
-
-                    <label class="title is-6 has-text-info-light m-3">
-                        <input type="radio" name="method" value="HEAD" />
-                        HEAD
-                    </label>
-                </div>
-
-                <input class="button has-background-link" type="submit" value="Get Pokemon" />
-            </div>
-
-            <div class="content-div mt-3" name="content"></div>
-        </form>
-    </section>
-    <section>
-        <h3 class="has-background-info title is-4 is-clickable p-3" id="typeHeader">Search by type</h3>
-        <form class="hidden box has-background-success m-3 mb-6 py-3 px-6 is-shadowless is-3" id="typeForm"
-            action="/getPokemonType">
-            <div class="is-flex is-justify-content-space-between mt-3">
-
-                <div class="field is-horizontal is-flex is-align-content-center m-0">
-                    <label class="field-label has-text-white has-text-weight-bold is-align-self-center mr-3 mt-1"
-                        for="type">Type: </label>
-                    <div class="select">
-                        <select id="typeField" name="type">
-                            <option value="Water">Water</option>
-                            <option value="Fire">Fire</option>
-                            <option value="Grass">Grass</option>
-                            <option value="Poison">Poison</option>
-                            <option value="Flying">Flying</option>
-                            <option value="Psychic">Psychic</option>
-                            <option value="Ice">Ice</option>
-                            <option value="Ground">Ground</option>
-                            <option value="Rock">Rock</option>
-                            <option value="Electric">Electric</option>
-                            <option value="Bug">Bug</option>
-                            <option value="Normal">Normal</option>
-                            <option value="Fighting">Fighting</option>
-                            <option value="Fairy">Fairy</option>
-                            <option value="Ghost">Ghost</option>
-                            <option value="Dark">Dark</option>
-                            <option value="Steel">Steel</option>
-                            <option value="Dragon">Dragon</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="is-flex is-align-content-center is-align-self-center">
-
-                    <label class="title is-6 has-text-info-light m-3 ml-0">
-                        <input type="radio" name="method" value="GET" checked />
-                        GET
-                    </label>
-                    <label class="title is-6 has-text-info-light m-3 ml-0">
-                        <input type="radio" name="method" value="HEAD" />
-                        HEAD
-                    </label>
-                </div>
-                <input class="button has-background-link" type="submit" value="Get Pokemon" />
-            </div>
-            <div class="content-div mt-3" name="content"></div>
-        </form>
-    </section>
-    <section>
-        <h3 class="has-background-info title is-4 is-clickable p-3" id="favHeader">Get favorites</h3>
-        <form class="hidden box has-background-success m-3 mb-6 py-3 px-6 is-shadowless is-3" id="favForm"
-            action="/getPokemonFavs">
-            <div class="is-flex is-justify-content-space-between mt-3">
-                <div class="is-flex is-align-content-center is-align-self-center">
-
-                    <label class="title is-6 has-text-info-light m-3 ml-0">
-                        <input type="radio" name="method" value="GET" checked />
-                        GET
-                    </label><label class="title is-6 has-text-info-light m-3 ml-0">
-                        <input type="radio" name="method" value="HEAD" />
-                        HEAD
-                    </label>
-                </div> <input class="button has-background-link" type="submit" value="Get Favorites" />
-            </div>
-            <div class="content-div mt-3" name="content">
-
-
-        </form>
-    </section>
-    <section>
-        <h3 class="has-background-info title is-4 is-clickable p-3" id="allHeader">Get all Pokemon</h3>
-        <form class="hidden box has-background-success m-3 mb-6 py-3 px-6 is-shadowless is-3 " id="allForm"
-            action="/getPokemon">
-            <div class="is-flex is-justify-content-space-between mt-3">
-                <div class="is-flex is-align-content-center is-align-self-center">
-
-                    <label class="title is-6 has-text-info-light m-3">
-                        <input type="radio" name="method" value="GET" checked />
-                        GET
-                    </label><label class="title is-6 has-text-info-light m-3">
-                        <input type="radio" name="method" value="HEAD" />
-                        HEAD
-                    </label>
-                </div>
-                <input class="button has-background-link" type="submit" value="Get All" />
-            </div>
-            <div class="content-div mt-3" name="content"></div>
-        </form>
-    </section>
-
-    <h2 class="title has-text-link mt-6">POST Requests</h2>
-    <section>
-        <h3 class="has-background-info title is-4 is-clickable p-3" id="createHeader">Create a Pokemon</h3>
-        <form class="hidden box has-background-success m-3 mb-6 py-3 px-6 is-shadowless is-3" id="createForm"
-            action="/addPokemon" method="POST">
-            <div class="form-controls is-flex is-justify-content-space-between mt-3">
-                <div class="field is-horizontal is-flex is-align-content-center m-0">
-                    <label class="field-label has-text-white has-text-weight-bold is-align-self-center mr-3 mt-1"
-                        for="name">Name: </label>
-                    <input class="field-body input has-text-white is-align-self-center" id="createNameField" type="text"
-                        name="name" />
-                </div>
-                <label class="field-label has-text-white has-text-weight-bold is-align-self-center mr-3 mt-1"
-                    for="type">Type: </label>
-                <div class="select">
-                    <select id="typeSelect" name="type">
-                        <option value="Water">Water</option>
-                        <option value="Fire">Fire</option>
-                        <option value="Grass">Grass</option>
-                        <option value="Poison">Poison</option>
-                        <option value="Flying">Flying</option>
-                        <option value="Psychic">Psychic</option>
-                        <option value="Ice">Ice</option>
-                        <option value="Ground">Ground</option>
-                        <option value="Rock">Rock</option>
-                        <option value="Electric">Electric</option>
-                        <option value="Bug">Bug</option>
-                        <option value="Normal">Normal</option>
-                        <option value="Fighting">Fighting</option>
-                        <option value="Fairy">Fairy</option>
-                        <option value="Ghost">Ghost</option>
-                        <option value="Dark">Dark</option>
-                        <option value="Steel">Steel</option>
-                        <option value="Dragon">Dragon</option>
-                    </select>
-                </div>
-                <label class="field-label has-text-white has-text-weight-bold is-align-self-center mr-3 mt-1"
-                    for="height">Height:</label>
-                <input class="field-body input has-text-white is-align-self-center" type="number" id="heightField"
-                    name="height" min="1" max="100">
-
-                <label class="field-label has-text-white has-text-weight-bold is-align-self-center mr-3 mt-1"
-                    for="height">Weight:</label>
-                <input class="field-body input has-text-white is-align-self-center" type="number" id="weightField"
-                    name="weight" min="1" max="100">
-
-                <input class="button has-background-link" type="submit" value="Create Pokemon" />
-            </div>
-            <div class="content-div mt-3" name="content"></div>
-        </form>
-    </section>
-    <section>
-        <h3 class="has-background-info title is-4 is-clickable p-3" id="addFavHeader">Add pokemon to favorites</h3>
-        <form class="hidden box has-background-success m-3 mb-6 py-3 px-6 is-shadowless is-3 is-flex" id="favForm"
-            action="/favPokemon" method="POST">
-            <div class="form-controls is-flex is-justify-content-space-between mt-3 is-align-items-center">
-                <div class="fav-controls is-flex-direction-row mr-6">
-                    <div class="field is-horizontal is-flex m-0">
-                        <label class="fav-name field-label has-text-white has-text-weight-bold mr-3 mt-1"
-                            for="name">Name:
-                        </label>
-                        <input class="field-body input has-text-white is-align-self-center mb-3" id="favNameField"
-                            type="text" name="name" />
-                    </div>
-                    <div class="field is-flex-direction-column is-align-content-center m-0">
+        <h2 class="title has-text-link">GET Requests</h2>
+        <section>
+            <h3 class="has-background-info title is-4 is-clickable p-3" id="nameHeader">Search by name</h3>
+            <form class="hidden box has-background-success m-3 mb-6 py-3 px-6 is-shadowless is-3" id="nameForm"
+                action="/getPokemonName">
+                <div class="is-flex is-justify-content-space-between mt-3">
+                    <div class="field is-horizontal is-flex is-align-content-center m-0">
                         <label class="field-label has-text-white has-text-weight-bold is-align-self-center mr-3 mt-1"
-                            for="favReason">Why are you favoriting this Pokemon?: </label>
-                        <input class="textarea is-align-content-start" id="reasonField" type="textarea"
-                            name="favReason" />
+                            for="name">
+                            Name:
+                        </label>
+                        <input class="field-body input has-text-white is-align-self-center" id="nameField" type="text"
+                            name="name" />
+                    </div>
+
+
+                    <div class="is-flex is-align-content-center is-align-self-center">
+                        <label class="title is-6 has-text-info-light m-3">
+                            <input type="radio" name="method" value="GET" checked />
+                            GET
+                        </label>
+
+                        <label class="title is-6 has-text-info-light m-3">
+                            <input type="radio" name="method" value="HEAD" />
+                            HEAD
+                        </label>
+                    </div>
+
+                    <input class="button has-background-link" type="submit" value="Get Pokemon" />
+                </div>
+
+                <div class="content-div mt-3" name="content"></div>
+            </form>
+        </section>
+        <section>
+            <h3 class="has-background-info title is-4 is-clickable p-3" id="typeHeader">Search by type</h3>
+            <form class="hidden box has-background-success m-3 mb-6 py-3 px-6 is-shadowless is-3" id="typeForm"
+                action="/getPokemonType">
+                <div class="is-flex is-justify-content-space-between mt-3">
+
+                    <div class="field is-horizontal is-flex is-align-content-center m-0">
+                        <label class="field-label has-text-white has-text-weight-bold is-align-self-center mr-3"
+                            for="type">Type: </label>
+                        <div class="select">
+                            <select id="typeField" name="type">
+                                <option value="Water">Water</option>
+                                <option value="Fire">Fire</option>
+                                <option value="Grass">Grass</option>
+                                <option value="Poison">Poison</option>
+                                <option value="Flying">Flying</option>
+                                <option value="Psychic">Psychic</option>
+                                <option value="Ice">Ice</option>
+                                <option value="Ground">Ground</option>
+                                <option value="Rock">Rock</option>
+                                <option value="Electric">Electric</option>
+                                <option value="Bug">Bug</option>
+                                <option value="Normal">Normal</option>
+                                <option value="Fighting">Fighting</option>
+                                <option value="Fairy">Fairy</option>
+                                <option value="Ghost">Ghost</option>
+                                <option value="Dark">Dark</option>
+                                <option value="Steel">Steel</option>
+                                <option value="Dragon">Dragon</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="is-flex is-align-content-center is-align-self-center">
+
+                        <label class="title is-6 has-text-info-light m-3 ml-0">
+                            <input type="radio" name="method" value="GET" checked />
+                            GET
+                        </label>
+                        <label class="title is-6 has-text-info-light m-3 ml-0">
+                            <input type="radio" name="method" value="HEAD" />
+                            HEAD
+                        </label>
+                    </div>
+                    <input class="button has-background-link" type="submit" value="Get Pokemon" />
+                </div>
+                <div class="content-div mt-3" name="content"></div>
+            </form>
+        </section>
+        <section>
+            <h3 class="has-background-info title is-4 is-clickable p-3" id="favHeader">Get favorites</h3>
+            <form class="hidden box has-background-success m-3 mb-6 py-3 px-6 is-shadowless is-3" id="favForm"
+                action="/getPokemonFavs">
+                <div class="is-flex is-justify-content-space-between mt-3">
+                    <div class="is-flex is-align-content-center is-align-self-center">
+
+                        <label class="title is-6 has-text-info-light m-3 ml-0">
+                            <input type="radio" name="method" value="GET" checked />
+                            GET
+                        </label><label class="title is-6 has-text-info-light m-3 ml-0">
+                            <input type="radio" name="method" value="HEAD" />
+                            HEAD
+                        </label>
+                    </div> <input class="button has-background-link" type="submit" value="Get Favorites" />
+                </div>
+                <div class="content-div mt-3" name="content">
+
+
+            </form>
+        </section>
+        <section>
+            <h3 class="has-background-info title is-4 is-clickable p-3" id="allHeader">Get all Pokemon</h3>
+            <form class="hidden box has-background-success m-3 mb-6 py-3 px-6 is-shadowless is-3 " id="allForm"
+                action="/getPokemon">
+                <div class="is-flex is-justify-content-space-between mt-3">
+                    <div class="is-flex is-align-content-center is-align-self-center">
+
+                        <label class="title is-6 has-text-info-light m-3">
+                            <input type="radio" name="method" value="GET" checked />
+                            GET
+                        </label><label class="title is-6 has-text-info-light m-3">
+                            <input type="radio" name="method" value="HEAD" />
+                            HEAD
+                        </label>
+                    </div>
+                    <input class="button has-background-link" type="submit" value="Get All" />
+                </div>
+                <div class="content-div mt-3" name="content"></div>
+            </form>
+        </section>
+
+        <h2 class="title has-text-link mt-6">POST Requests</h2>
+        <section>
+            <h3 class="has-background-info title is-4 is-clickable p-3" id="createHeader">Create a Pokemon</h3>
+            <form class="hidden box has-background-success m-3 mb-6 py-3 px-6 is-shadowless is-3" id="createForm"
+                action="/addPokemon" method="POST">
+                <div class="form-controls is-flex is-justify-content-space-between is-align-items-center mt-3">
+                    <div class="create-controls is-flex-direction-column mr-4">
+                        <div class="is-flex mb-4 is-justify-content-space-between">
+                            <div class="field is-horizontal is-flex is-align-content-center m-0 ">
+                                <label
+                                    class="field-label has-text-white has-text-weight-bold is-align-self-center mr-3 mt-1"
+                                    for="name">Name: </label>
+                                <input class="field-body input has-text-white is-align-self-center mr-3"
+                                    id="createNameField" type="text" name="name" />
+                            </div>
+                            <label
+                                class="field-label has-text-white has-text-weight-bold is-align-self-center mr-3 mt-1"
+                                for="type">Type: </label>
+                            <div class="select">
+                                <select id="typeSelect" name="type">
+                                    <option value="Water">Water</option>
+                                    <option value="Fire">Fire</option>
+                                    <option value="Grass">Grass</option>
+                                    <option value="Poison">Poison</option>
+                                    <option value="Flying">Flying</option>
+                                    <option value="Psychic">Psychic</option>
+                                    <option value="Ice">Ice</option>
+                                    <option value="Ground">Ground</option>
+                                    <option value="Rock">Rock</option>
+                                    <option value="Electric">Electric</option>
+                                    <option value="Bug">Bug</option>
+                                    <option value="Normal">Normal</option>
+                                    <option value="Fighting">Fighting</option>
+                                    <option value="Fairy">Fairy</option>
+                                    <option value="Ghost">Ghost</option>
+                                    <option value="Dark">Dark</option>
+                                    <option value="Steel">Steel</option>
+                                    <option value="Dragon">Dragon</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="is-flex is-justify-content-space-between">
+                            <div class="is-flex is-flex-direction-row">
+                                <label
+                                    class="field-label has-text-white has-text-weight-bold is-align-self-center mr-3 mt-1"
+                                    for="height">Height:</label>
+                                <input class="field-body input has-text-white is-align-self-center mr-3" type="number"
+                                    id="heightField" name="height" min="1" max="100">
+                            </div>
+                            <div class="is-flex is-flex-direction-row">
+                                <label
+                                    class="field-label has-text-white has-text-weight-bold is-align-self-center mr-3 mt-1"
+                                    for="height">Weight:</label>
+                                <input class="field-body input has-text-white is-align-self-center" type="number"
+                                    id="weightField" name="weight" min="1" max="100">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="create-btn is-flex is-justify-content-end">
+                        <input class="button has-background-link" type="submit" value="Create Pokemon" />
                     </div>
                 </div>
-                <input class="button has-background-link" type="submit" value="Favorite Pokemon" />
-            </div>
-            <div class="content-div mt-3" name="content"></div>
-        </form>
-    </section>
+                <div class="content-div mt-3" name="content"></div>
+            </form>
+        </section>
+        <section>
+            <h3 class="has-background-info title is-4 is-clickable p-3" id="addFavHeader">Add pokemon to favorites</h3>
+            <form
+                class="hidden box has-background-success m-3 mb-6 py-3 px-6 is-shadowless is-3 is-flex is-flex-direction-column"
+                id="favForm" action="/favPokemon" method="POST">
+                <div class="form-controls is-flex is-justify-content-space-between mt-3 is-align-items-center">
+                    <div class="fav-controls is-flex-direction-row mr-6">
+                        <div class="field is-horizontal is-flex m-0">
+                            <label class="fav-name field-label has-text-white has-text-weight-bold mr-3 mt-1"
+                                for="name">Name:
+                            </label>
+                            <input class="field-body input has-text-white is-align-self-center mb-3" id="favNameField"
+                                type="text" name="name" />
+                        </div>
+                        <div class="field is-flex-direction-column is-align-content-center m-0">
+                            <label
+                                class="field-label has-text-white has-text-weight-bold is-align-self-center mr-3 mt-1"
+                                for="favReason">Why are you favoriting this Pokemon?: </label>
+                            <textarea class="textarea is-align-content-start" id="reasonField" type="textarea"
+                                name="favReason"></textarea>
+                        </div>
+                    </div>
+                    <input class="button has-background-link" type="submit" value="Favorite Pokemon" />
+                </div>
+                <div class="content-div mt-3" name="content"></div>
+            </form>
+        </section>
+    </div>
 </body>
 
 </html>

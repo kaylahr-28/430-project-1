@@ -24,6 +24,14 @@
     --bulma-danger-l: 58%;
 }
 
+label,
+label input,
+.button,
+select {
+    font-family: "Madimi One";
+    font-size: 1.1rem;
+}
+
 .title {
     margin: 0 auto;
 }
@@ -94,6 +102,9 @@ h3 {
 input[type="textarea"] {
     display: block;
     width: 100%;
+    min-width: none;
+    max-width: 300px;
+    line-height: 1.4;
 
 }
 
@@ -104,6 +115,23 @@ input[type="textarea"] {
 .form-controls,
 .fav-controls {
     width: 100%;
+
+    input[type="text"] {
+        max-width: none;
+    }
+}
+
+.create-controls {
+    width: 100%;
+    max-width: 600px;
+}
+
+.fav-controls {
+    max-width: 500px;
+}
+
+.create-btn {
+    min-width: 200px;
 }
 
 
@@ -111,6 +139,16 @@ input[type="textarea"] {
     max-width: fit-content;
 }
 
+.create-height-weight {
+    display: flex;
+}
+
+.fav-ctrl-btn {
+    width: 100%;
+}
+
 section {
     margin: 0 2rem;
+    max-width: 1100px;
+    justify-self: center;
 }
