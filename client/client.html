@@ -13,8 +13,8 @@
     <script>
         // 4+ get endpoints getting diff data, 
         // 1+ supporting query parameters to filter/limit API data
-        // - Search by name (CHANGE-- RETURN ONLY NAME not all info), GIVE AMOUNT
-        // - Search by type, GIVE AMOUNT
+        // - Search by name, GIVE AMOUNT
+        // - Search by type (CHANGE-- RETURN ONLY NAME not all info DONE!), GIVE AMOUNT
         // - get favorites+reasoning, (RETURN ONLY NAME TYPE FAV AND REASONING???) GIVE AMOUNT
         // - get all pokemon, GIVE AMOUNT
 
@@ -31,7 +31,7 @@
                     content.innerHTML = `<b>Pokemon created!</b>`;
                     break;
                 case 204:
-                    content.innerHTML = `<b>Pokemon favorited! (No Content)</b>`;
+                    content.innerHTML = `<b class="has-text-primary">Pokemon favorited! (No Content)</b>`;
                     return;
                 case 400:
                     content.innerHTML = `<b>Bad Request :(</b>`;
@@ -41,10 +41,7 @@
                     break;
             }
 
-
-
-
-
+            //get or post
             if (method !== "HEAD") {
                 let finalOutput;
                 let obj = await response.json();
@@ -53,12 +50,15 @@
                     finalOutput = JSON.stringify(obj).slice(0, 400) + '...';
                 } else {
                     finalOutput = JSON.stringify(obj);
-                }//<p class='tag ml-3 is-bordered'>${response.status}</p>
+                }
+                //formatting with spaces after commas
+                finalOutput = finalOutput.replaceAll(",", ", ");
+
                 content.innerHTML += `
                 <span class="tags has-addons my-3">
       <span class="tag is-dark">code</span>
       <span class="status-code tag ${response.status == 404 || response.status == 400 ? 'is-danger' : 'is-primary'}">${response.status}</span>
-    </span><p>Content-Length: ${JSON.stringify(obj).length}</p><p class="pb-3">${finalOutput}</p>`;//`${response.status == 400 || response.status == 404 ? JSON.stringify(obj.message) : finalOutput}`;
+    </span><p>Content-Length: ${JSON.stringify(obj).length}</p><p class="pb-3">${finalOutput}</p>`;
             }
             //text is red if status code is 400/404
             document.querySelectorAll('.content-div *').forEach(

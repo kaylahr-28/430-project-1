@@ -48,46 +48,87 @@
     </script>
 </head>
 
-<body>
-    <a href="client.html">Go To Test Application</a>
-    <h1 class="title is-1">Pokemon!</h1>
-    <h2 class="title">GET Requests</h2>
-    <section>
-        <h3 class="title is-4">/getPokemonName</h3>
-        <div class="hidden doc-div">Name
-            <h4>Query Params</h4>
-            <span>name</span>
-            <p>(required) - A pokemon's name to filter results with</p>
-            <h4>Returns</h4>
-            <h4>Examples</h4>
-        </div>
+<body class="m-2">
+    <a href="client.html" class="button has-background-warning-dark has-text-white">Go To Test Application</a>
+    <h1 class="title is-1 has-text-centered has-text-primary mt-6">Pokemon!</h1>
+    <h4 class="subtitle has-text-white has-text-centered is-size-5 mt-3 mb-6">(Documentation)</h4>
+    <div class="container is-flex is-flex-direction-column is-justify-items-center ">
 
-    </section>
-    <section>
-        <h3 class="title is-4">/getPokemonType</h3>
-        <div class="hidden doc-div">Type</div>
-    </section>
-    <section>
-        <h3 class="title is-4">/getPokemonFavs</h3>
-        <div class="hidden doc-div">Favorites</div>
+        <h2 class="title has-text-link">GET Requests</h2>
+        <section>
+            <h3 class="has-background-info title is-4 is-clickable p-3">/getPokemonName</h3>
+            <div class="hidden doc-div box has-background-success m-3 mb-6 py-3 px-6 is-shadowless is-3">
+                <h4 class="has-text-white is-size-5">Query Params</h4>
+                <span class="tag is-size-6 has-background-link has-text-white">name</span>
+                <span class="has-text-white">(required) - A pokemon's name to filter results with</span>
+                <h4 class="has-text-white is-size-5">Returns</h4>
+                <h4>Examples</h4>
+            </div>
 
-    </section>
-    <section>
-        <h3 class="title is-4">/getPokemon</h3>
-        <div class="hidden doc-div">All pokemon</div>
+        </section>
+        <section>
+            <h3 class="has-background-info title is-4 is-clickable p-3">/getPokemonType</h3>
+            <div class="hidden doc-div box has-background-success m-3 mb-6 py-3 px-6 is-shadowless is-3">
+                Type
+                <h4>Query Params</h4>
+                <span>name</span>
+                <p>(required) - A pokemon's type to filter results with</p>
+                <h4>Returns</h4>
+                <h4>Examples</h4>
+            </div>
+        </section>
+        <section>
+            <h3 class="has-background-info title is-4 is-clickable p-3">/getPokemonFavs</h3>
+            <div class="hidden doc-div box has-background-success m-3 mb-6 py-3 px-6 is-shadowless is-3">
+                Favorites
+                <h4>Query Params</h4>
+                <p>none</p>
+                <h4>Returns</h4>
+                <h4>Examples</h4>
+            </div>
 
-    </section>
+        </section>
+        <section>
+            <h3 class="has-background-info title is-4 is-clickable p-3">/getPokemon</h3>
+            <div class="hidden doc-div box has-background-success m-3 mb-6 py-3 px-6 is-shadowless is-3">
+                All pokemon
+                <h4>Query Params</h4>
+                <p>none</p>
+                <h4>Returns</h4>
+                <h4>Examples</h4>
+            </div>
 
-    <h2 class="title">POST Requests</h2>
-    <section>
-        <h3 class="title is-4">/addPokemon</h3>
-        <div class="hidden doc-div">Create</div>
-    </section>
-    <section>
-        <h3 class="title is-4">/favPokemon</h3>
-        <div class="hidden doc-div">Add Favorties</div>
+        </section>
 
-    </section>
+        <h2 class="title has-text-link">POST Requests</h2>
+        <section>
+            <h3 class="has-background-info title is-4 is-clickable p-3">/addPokemon</h3>
+            <div class="hidden doc-div box has-background-success m-3 mb-6 py-3 px-6 is-shadowless is-3">
+                Create
+                <h4>Supported Body Formats</h4>
+                <p class="tag">application/json</p>
+                <p class="tag">application/x-www-form-urlencoded</p>
+                <h4>Body Params</h4>
+
+                <h4>Returns</h4>
+                <h4>Examples</h4>
+            </div>
+        </section>
+        <section>
+            <h3 class="has-background-info title is-4 is-clickable p-3">/favPokemon</h3>
+            <div class="hidden doc-div box has-background-success m-3 mb-6 py-3 px-6 is-shadowless is-3">
+                Add Favorties
+                <h4>Supported Body Formats</h4>
+                <p class="tag">application/json</p>
+                <p class="tag">application/x-www-form-urlencoded</p>
+                <h4>Body Params</h4>
+
+                <h4>Returns</h4>
+                <h4>Examples</h4>
+            </div>
+
+        </section>
+    </div>
 </body>
 
 </html>

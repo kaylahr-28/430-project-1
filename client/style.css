@@ -46,7 +46,6 @@ form,
     transition: all 0.5s ease-out allow-discrete;
 
     transition-behavior: allow-discrete;
-
 }
 
 .hidden {
@@ -77,9 +76,7 @@ input[type="number"] {
     max-width: 200px;
     display: inline-block;
     height: 30px;
-    /*not working right*/
-    color: var(--bulma-scheme-main);
-    background-color: var(--bulma-scheme-main);
+    color: var(--bulma-main-scheme);
 }
 
 label {
@@ -95,7 +92,8 @@ h2 {
     padding: 0 2rem;
 }
 
-h3 {
+h3,
+h4 {
     font-family: "Madimi One";
 }
 
@@ -105,7 +103,6 @@ input[type="textarea"] {
     min-width: none;
     max-width: 300px;
     line-height: 1.4;
-
 }
 
 .button {

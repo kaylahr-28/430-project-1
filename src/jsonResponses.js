@@ -14,37 +14,52 @@ const types = ["Water", "Fire", "Grass", "Poison", "Flying", "Psychic", "Ice", "
 //format JSON objects before sending it over to be displayed
 //removes id/num, img link, weaknesses, next evolution
 //adds 'favorite' key w default vals
-const formatPokemon = (pokemon) => {
+const formatPokemon = (pokemon, favorites) => {
     const formattedPokemon = [];
     for (let monster of pokemon) {
-        const formatMonster = {
-            "name": monster.name,
-            "type": monster.type,
-            "height": monster.height,
-            "weight": monster.weight,
-            "favorite": {
+        let formatMonster = {};
+        if (!favorites) {
+
+
+            formatMonster = {
+                "name": monster.name,
+                "type": monster.type,
+                "height": monster.height,
+                "weight": monster.weight,
+                "favorite": {
+                }
+            };
+            if (!formatMonster.weight.includes('kg')) {
+                formatMonster.weight += " kg";
+                //only added pokemon are missing kg, which means
+                // theyre missing m too
+                formatMonster.height += " m";
             }
-        };
-        if (!formatMonster.weight.includes('kg')) {
-            formatMonster.weight += " kg";
-            //only added pokemon are missing kg, which means
-            // theyre missing m too
-            formatMonster.height += " m";
-        }
-        //check if the pokemon has been favorited
-        //if not, set default info
-        if (!monster.favorite) {
-            formatMonster.favorite = {
-                "isFavorited": false,
-                "reasoning": "N/A"
+            //check if the pokemon has been favorited
+            //if not, set default info
+            if (!monster.favorite) {
+                formatMonster.favorite = {
+                    "isFavorited": false,
+                    "reasoning": "N/A"
+                }
+            } else {
+                formatMonster.favorite = {
+                    "isFavorited": monster.favorite.isFavorited,
+                    "reasoning": monster.favorite.reasoning
+                }
             }
         } else {
-            formatMonster.favorite = {
-                "isFavorited": monster.favorite.isFavorited,
-                "reasoning": monster.favorite.reasoning
+            //format 'getFav' pokemon with just name and favorite obj
+            formatMonster = {
+                "name": monster.name,
+                "favorite": {
+                    "isFavorited": monster.favorite.isFavorited,
+                    "reasoning": monster.favorite.reasoning
+                }
             }
         }
         formattedPokemon.push(formatMonster);
+
     }
     return formattedPokemon;
 }
@@ -57,7 +72,6 @@ const respondJSON = (request, response, status, obj) => {
         'Content-Length': Buffer.byteLength(content, 'utf8'),
     });
 
-
     if (request.method !== "HEAD" && status !== 204) {
         response.write(JSON.stringify(obj));
     }
@@ -69,7 +83,7 @@ const respondJSON = (request, response, status, obj) => {
 const getPokemon = (request, response, pathname) => {
     //get all pokemon
     if (pathname == "/getPokemon") {
-        const responseJSON = formatPokemon(pokemon);
+        const responseJSON = formatPokemon(pokemon, false);
 
         return respondJSON(request, response, 200, responseJSON);
 
@@ -92,8 +106,14 @@ const getPokemon = (request, response, pathname) => {
         }
 
         //return only pokemon that are of the searched type
-        const selectedPokemon = formatPokemon(pokemon).filter(monster => monster.type.includes(request.query.type));
-        responseJSON = selectedPokemon;
+        const selectedPokemon = formatPokemon(pokemon, false).filter(monster => monster.type.includes(request.query.type));
+        const pkmnNames = [];
+
+        //only return names
+        for (let pkmn of selectedPokemon) {
+            pkmnNames.push(pkmn.name);
+        }
+        responseJSON = pkmnNames;
 
         return respondJSON(request, response, 200, responseJSON);
 
@@ -116,11 +136,10 @@ const getPokemon = (request, response, pathname) => {
         }
 
         //return only pokemon that are of the searched type
-        const selectedPokemon = formatPokemon(pokemon).filter(monster => monster.name.includes(request.query.name));
+        const selectedPokemon = formatPokemon(pokemon, false).filter(monster => monster.name.includes(request.query.name));
         responseJSON = selectedPokemon;
         return respondJSON(request, response, 200, responseJSON);
     } else if (pathname == "/getPokemonFavs") {
-
 
         if (favPokemon.length == 0) {
             const responseJSON = {};
@@ -129,7 +148,7 @@ const getPokemon = (request, response, pathname) => {
 
             return respondJSON(request, response, 404, responseJSON);
         } else {
-            const responseJSON = formatPokemon(favPokemon);
+            const responseJSON = formatPokemon(favPokemon, true);
             return respondJSON(request, response, 200, responseJSON);
         }
     }
@@ -202,8 +221,6 @@ const addPokemon = (request, response, pathname) => {
 
         }
 
-
-        console.log(favPokemon);
         responseJSON.message = `${name} has been favorited for the following reason: ${favReason}`;
         return respondJSON(request, response, 204, responseJSON);
     }
